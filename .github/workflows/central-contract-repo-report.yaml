@@ -15,7 +15,7 @@ jobs:
       - name: Generate central contract repo report
         run: |
           docker run -v "$(pwd):/central-contract-repo:rw" \
-            --entrypoint /bin/sh znsio/specmatic \
+            --entrypoint /bin/sh specmatic/specmatic \
             -c "cd /central-contract-repo && java -jar /usr/src/app/specmatic.jar central-contract-repo-report"
 
       - name: Check URL Redirect
@@ -33,7 +33,7 @@ jobs:
           echo "Workflow ID: $workflow_id" # Debug print
           docker run \
             -v ${{ github.workspace }}:/workspace \
-            znsio/specmatic-insights-github-build-reporter:latest \
+            specmatic/specmatic-insights-github-build-reporter:latest \
               --specmatic-insights-host https://insights.specmatic.io \
               --specmatic-reports-dir /workspace/build/reports/specmatic \
               --org-id ${{ secrets.SPECMATIC_ORG_ID }} \
