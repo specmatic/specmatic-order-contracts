@@ -1,4 +1,5 @@
 {
+  "name": "place_iphone_order",
   "publish": {
     "topic": "place-order",
     "payload": {
