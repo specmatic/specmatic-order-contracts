@@ -3,6 +3,7 @@ name: Specmatic Insights Central Contract Repo Report
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
