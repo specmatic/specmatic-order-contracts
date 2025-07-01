@@ -7,6 +7,7 @@ info:
     name: Specmatic
 servers:
   - url: http://localhost:9000
+  - url: http://host.docker.internal:9000
 tags:
   - name: UUID
 paths:
