@@ -19,19 +19,21 @@ jobs:
             --entrypoint /bin/sh specmatic/specmatic \
             -c "cd /central-contract-repo && specmatic central-contract-repo-report"
 
-      - name: Check URL Redirect
+      - name: Save Specmatic license
         run: |
-          curl -I -L -o /dev/null -s -w "%{http_code} %{url_effective}\n" https://insights.specmatic.io
-
-      - name: Run Specmatic Insights Github Build Reporter
+          mkdir -p ~/.specmatic
+          echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
+  
+      - name: Run Specmatic Insights Build Reporter
         run: |
           docker run \
             -v ${{ github.workspace }}:/workspace \
-            specmatic/specmatic-insights-github-build-reporter:latest \
-              --specmatic-insights-host https://insights.specmatic.io \
-              --specmatic-reports-dir /workspace/build/reports/specmatic \
-              --org-id ${{ secrets.SPECMATIC_ORG_ID }} \
-              --branch-name ${{ github.ref_name }} \
-              --repo-name ${{ github.event.repository.name }} \
-              --repo-id ${{ github.repository_id }} \
-              --repo-url ${{ github.event.repository.html_url }}
+            -v ~/.specmatic:/root/.specmatic \
+            -w /workspace \
+            specmatic/specmatic-reporter \
+            send-report \
+            --metadata build_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} \
+            --branch-name ${{ github.ref_name }} \
+            --repo-name ${{ github.event.repository.name }} \
+            --repo-id ${{ github.repository_id }} \
+            --repo-url ${{ github.event.repository.html_url }}
