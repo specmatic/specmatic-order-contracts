@@ -1,0 +1,320 @@
+openapi: 3.0.0
+info:
+  title: Order BFF
+  description: Sample Order BFF
+  version: '5.0'
+  contact:
+    email: devs@specmatic.io
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: WIP
+    description: API still under development
+  - name: Product
+    description: Product Related APIs
+  - name: Order
+    description: Order Related APIs
+  - name: Monitor
+    description: Monitor Related APIs
+paths:
+  /products:
+    summary: Create a new product
+    post:
+      description: Create a new product
+      operationId: createProduct
+      tags:
+        - Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductBase'
+            examples:
+              SUCCESS:
+                value:
+                  name: iPhone
+                  type: gadget
+                  inventory: 100
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+              examples:
+                SUCCESS:
+                  value:
+                    id: 1
+        '202':
+          description: Product Accepted
+          headers:
+            Link:
+              schema:
+                $ref: '#/components/schemas/MonitorLink'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+  /findAvailableProducts:
+    parameters:
+      - schema:
+          type: string
+        name: type
+        in: query
+        required: false
+        examples:
+          SUCCESS:
+            value: gadget
+      - name: pageSize
+        in: header
+        schema:
+          type: integer
+        required: true
+        examples:
+          SUCCESS:
+            value: 10
+    get:
+      description: Find available products
+      operationId: findAvailableProducts
+      tags:
+        - Product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+              examples:
+                SUCCESS:
+                  value:
+                    - name: iPhone
+                      id: 1
+                      type: gadget
+                      inventory: 100
+        '429':
+          description: TooManyRequests
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+                description: The number of seconds to wait before making the next request
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+  /orders:
+    post:
+      description: Create a new order
+      operationId: createOrder
+      tags:
+        - Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderBase'
+            examples:
+              SUCCESS:
+                value:
+                  productid: 1
+                  count: 2
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+              examples:
+                SUCCESS:
+                  value:
+                    id: 1
+        '202':
+          description: Order accepted
+          headers:
+            Link:
+              schema:
+                $ref: '#/components/schemas/MonitorLink'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+    get:
+      description: Retrieve orders
+      operationId: getOrders
+      tags:
+        - WIP
+        - Order
+      parameters:
+        - in: query
+          name: orderId
+          schema:
+            type: integer
+          required: false
+          description: ID of the order to retrieve. If not provided, returns all orders.
+          examples:
+            SUCCESS:
+              value: 100
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              examples:
+                SUCCESS:
+                  value:
+                    - id: 1
+                      productid: 1
+                      count: 2
+                      status: "completed"
+  /monitor/{id}:
+    get:
+      description: Retrieves a Monitor by ID
+      operationId: retrieveMonitor
+      tags:
+        - Monitor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Monitor status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+components:
+  schemas:
+    MonitorLink:
+      type: string
+      description: Monitor link to check status
+      example: </monitor/123>;rel=related;title=monitor
+    Id:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+        - id
+    ProductBase:
+      title: Product Details
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        inventory:
+          type: integer
+      required:
+        - name
+        - type
+        - inventory
+    Product:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ProductBase'
+    OrderBase:
+      title: Order Details
+      type: object
+      properties:
+        productid:
+          type: integer
+        count:
+          type: integer
+      required:
+        - productid
+        - count
+    Order:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/OrderBase'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [pending, completed, cancelled]
+          required:
+            - status
+    MonitorResponse:
+      type: object
+      description: Monitoring of resources
+      properties:
+        request:
+          $ref: '#/components/schemas/Request'
+        response:
+          $ref: '#/components/schemas/Response'
+    Request:
+      type: object
+      description: A response to a request
+      properties:
+        method:
+          type: string
+        body:
+          type: object
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeaderItem'
+      required:
+        - method
+        - body
+        - headers
+    Response:
+      type: object
+      description: A response to a request
+      properties:
+        statusCode:
+          type: integer
+        body:
+          type: object
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeaderItem'
+      required:
+        - statusCode
+        - body
+        - headers
+    HeaderItem:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    BadRequest:
+      title: Bad Request
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: number
+        error:
+          type: string
+        message:
+          type: string

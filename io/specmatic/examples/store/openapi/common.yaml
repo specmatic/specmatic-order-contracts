@@ -1,5 +1,12 @@
 components:
   schemas:
+    Id:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+        - id
     ProductDetails:
       title: Product Details
       type: object
@@ -9,7 +16,7 @@ components:
         type:
           $ref: '#/components/schemas/ProductType'
         inventory:
-          type: integer 
+          type: integer
       required:
         - name
         - type
@@ -22,18 +29,10 @@ components:
         - food
         - gadget
         - other
-    ProductId:
-      title: Product Id
-      type: object
-      properties:
-        id:
-          type: integer
-      required:
-        - id
     Product:
       title: Product
       allOf:
-        - $ref: '#/components/schemas/ProductId'
+        - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/ProductDetails'
     OrderDetails:
       title: Order Details
@@ -43,12 +42,9 @@ components:
           type: integer
         count:
           type: integer
-        status:
-          $ref: '#/components/schemas/OrderStatus'
       required:
         - productid
         - count
-        - status
     OrderStatus:
       type: string
       title: OrderStatus
@@ -56,19 +52,24 @@ components:
         - fulfilled
         - pending
         - cancelled
-    OrderId:
-      title: Order Id
-      type: object
-      properties:
-        id:
-          type: integer
-      required:
-        - id
+    OrderUpdate:
+      allOf:
+        - $ref: '#/components/schemas/OrderDetails'
+        - type: object
+          properties:
+            status:
+              $ref: '#/components/schemas/OrderStatus'
     Order:
       title: Order
       allOf:
-        - $ref: '#/components/schemas/OrderId'
+        - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/OrderDetails'
+        - type: object
+          properties:
+            status:
+              $ref: '#/components/schemas/OrderStatus'
+          required:
+            - status
   parameters:
     OrderStatusParam:
       name: OrderStatusParam
