@@ -227,7 +227,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "common.yaml#/components/schemas/Id"
+                $ref: "common.yaml#/components/schemas/ProductId"
         "400":
           $ref: "./common_responses.yaml#/components/responses/BadRequest"
   /orders:
@@ -251,7 +251,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "common.yaml#/components/schemas/OrderDetails"
+              $ref: "#/components/schemas/OrderDetails"
             examples:
               CREATE_ORDER:
                 value:
@@ -263,7 +263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "common.yaml#/components/schemas/Id"
+                $ref: "common.yaml#/components/schemas/OrderId"
               examples:
                 CREATE_ORDER:
                   value:
@@ -332,7 +332,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "common.yaml#/components/schemas/OrderDetails"
+                $ref: "#/components/schemas/OrderDetails"
             examples:
               BULK_CREATE_ORDERS:
                 value:
@@ -348,7 +348,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "common.yaml#/components/schemas/Id"
+                  $ref: "common.yaml#/components/schemas/OrderId"
               examples:
                 BULK_CREATE_ORDERS:
                   value:
@@ -429,7 +429,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "./common.yaml#/components/schemas/OrderUpdate"
+              $ref: "#/components/schemas/OrderUpdate"
             examples:
               UPDATE_ORDER:
                 value:
@@ -457,6 +457,26 @@ paths:
           $ref: "./common_responses.yaml#/components/responses/BadRequest"
 components:
   schemas:
+    OrderDetails:
+      title: Order Details
+      type: object
+      properties:
+        productid:
+          type: integer
+        count:
+          type: integer
+      required:
+        - productid
+        - count
+
+    OrderUpdate:
+      allOf:
+        - $ref: '#/components/schemas/OrderDetails'
+        - type: object
+          properties:
+            status:
+              $ref: './common.yaml#/components/schemas/OrderStatus'
+
     IdempotencyKey:
       type: string
       format: uuid
