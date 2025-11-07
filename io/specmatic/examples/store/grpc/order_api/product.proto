@@ -7,7 +7,7 @@ option java_outer_classname = "ProductProto";
 
 package com.store;
 import "buf/validate/validate.proto";
-import "product_types.proto";
+import "order_api/product_types.proto";
 
 service ProductService {
   rpc SearchProducts(ProductSearchRequest) returns (ProductListResponse);
