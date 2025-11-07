@@ -8,7 +8,7 @@ option java_outer_classname = "OrderProto";
 package com.store;
 import "buf/validate/validate.proto";
 import "google/protobuf/empty.proto";
-import "order_api/order_types.proto";
+import "order_types.proto";
 
 service OrderService {
   rpc SearchOrders(OrderSearchRequest) returns (OrderListResponse);
