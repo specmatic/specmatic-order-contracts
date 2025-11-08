@@ -83,12 +83,12 @@ operations:
         $ref: '#/channels/OrderCancelled'
       messages:
         - $ref: '#/channels/OrderCancelled/messages/processCancellation.message'
-  orderAccepted:
-    action: send
-    channel:
-      $ref: '#/channels/OrderAccepted'
-    messages:
-      - $ref: '#/channels/OrderAccepted/messages/orderAccepted.message'
+  # orderAccepted:
+  #   action: send
+  #   channel:
+  #     $ref: '#/channels/OrderAccepted'
+  #   messages:
+  #     - $ref: '#/channels/OrderAccepted/messages/orderAccepted.message'
   initiateOrderDelivery:
     action: receive
     channel:
