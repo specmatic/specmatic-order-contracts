@@ -17,7 +17,7 @@ paths:
     parameters:
       - name: id
         schema:
-          type: number
+          type: integer
         in: path
         required: true
         examples:
@@ -40,7 +40,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./common.yaml#/components/schemas/Product"
+                $ref: "#/components/schemas/Product"
               examples:
                 GET_PRODUCT:
                   value:
@@ -49,27 +49,27 @@ paths:
                     inventory: 10
                     id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: "Not Found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponseBody"
-              examples:
-                INVALID_ID:
-                  value:
-                    timestamp: "2023-03-17T12:06:56.177+00:00"
-                    status: 404
-                    error: "Not Found"
-                    message: "Not found"
-    post:
+          $ref: "#/components/responses/NotFound"
+    patch:
       description: Update product details
-      operationId: post-products-id
+      operationId: patch-products-id
       tags:
       - Product
       security:
         - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductBase"
+            examples:
+              UPDATE_PRODUCT:
+                value:
+                  name: "XYZ Fone"
+                  type: "gadget"
+                  inventory: 10
       responses:
         "200":
           description: Update successful
@@ -81,18 +81,9 @@ paths:
                 UPDATE_PRODUCT:
                   value: "success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "./common.yaml#/components/schemas/ProductDetails"
-            examples:
-              UPDATE_PRODUCT:
-                value:
-                  name: "XYZ Fone"
-                  type: "gadget"
-                  inventory: 10
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       description: Delete a product
       tags:
@@ -111,7 +102,9 @@ paths:
                 DELETE_PRODUCT:
                   value: "success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
   "/products/{id}/image":
     put:
       description: Update or upload a product image
@@ -159,21 +152,14 @@ paths:
                 properties:
                   message:
                     type: string
-                  productId:
-                    type: integer
               examples:
                 UPDATE_IMAGE:
                   value:
-                    message: "Product image updated successfully"
-                    productId: 10
+                    message: "Success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponseBody"
+          $ref: "#/components/responses/NotFound"
   /products:
     get:
       description: GET Products based on type
@@ -184,7 +170,7 @@ paths:
         - name: type
           in: query
           schema:
-            $ref: "./common.yaml#/components/schemas/ProductType"
+            $ref: "#/components/schemas/ProductType"
       responses:
         "200":
           description: List of products in the response
@@ -193,7 +179,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "common.yaml#/components/schemas/Product"
+                  $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/BadRequest"
     post:
       description: POST products
       operationId: post-products
@@ -214,7 +202,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "common.yaml#/components/schemas/ProductDetails"
+              $ref: "#/components/schemas/ProductBase"
             examples:
                 CREATE_PRODUCT:
                   value:
@@ -227,9 +215,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "common.yaml#/components/schemas/ProductId"
+                $ref: "#/components/schemas/Id"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
   /orders:
     post:
       description: POST /orders
@@ -251,7 +239,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OrderDetails"
+              $ref: "#/components/schemas/OrderBase"
             examples:
               CREATE_ORDER:
                 value:
@@ -263,13 +251,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "common.yaml#/components/schemas/OrderId"
+                $ref: "#/components/schemas/Id"
               examples:
                 CREATE_ORDER:
                   value:
                     id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
     get:
       description: Search for orders
       operationId: get-orders
@@ -283,7 +271,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "./common.yaml#/components/schemas/Order"
+                  $ref: "#/components/schemas/Order"
               examples:
                 200_OK:
                   value:
@@ -292,22 +280,7 @@ paths:
                       status: "pending"
                       id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
-      parameters:
-        - name: productid
-          in: query
-          schema:
-            type: number
-          examples:
-            200_OK:
-              value: 10
-        - name: status
-          in: query
-          schema:
-            type: string
-          examples:
-            200_OK:
-              value: fulfilled
+          $ref: "#/components/responses/BadRequest"
   /orders/bulk:
     post:
       description: Create multiple orders in bulk
@@ -332,7 +305,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/OrderDetails"
+                $ref: "#/components/schemas/OrderBase"
             examples:
               BULK_CREATE_ORDERS:
                 value:
@@ -348,18 +321,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "common.yaml#/components/schemas/OrderId"
+                  $ref: "#/components/schemas/Id"
               examples:
                 BULK_CREATE_ORDERS:
                   value:
                     - id: 10
                     - id: 30
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
   "/orders/{id}":
     parameters:
       - schema:
-          type: number
+          type: integer
         name: id
         in: path
         required: true
@@ -383,7 +356,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./common.yaml#/components/schemas/Order"
+                $ref: "#/components/schemas/Order"
               examples:
                 GET_ORDER:
                   value:
@@ -392,39 +365,16 @@ paths:
                     status: "pending"
                     id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: "Not Found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponseBody"
-              examples:
-                INVALID_ID:
-                  value:
-                    timestamp: "2023-03-17T12:06:56.177+00:00"
-                    status: 404
-                    error: "Not Found"
-                    message: "Product with id 344 was not found"
-    post:
+          $ref: "#/components/responses/NotFound"
+    patch:
       description: Update order details
-      operationId: post-orders-id
+      operationId: patch-orders-id
       tags:
       - Order
       security:
         - ApiKeyAuth: []
-      responses:
-        "200":
-          description: Success
-          content:
-            text/plain:
-              schema:
-                type: string
-              examples:
-                UPDATE_ORDER:
-                  value: "success"
-        "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
       requestBody:
         content:
           application/json:
@@ -436,6 +386,20 @@ paths:
                   productid: 10
                   count: 1
                   status: pending
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                UPDATE_ORDER:
+                  value: "success"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       description: Cancel an order
       operationId: delete-orders-id
@@ -454,10 +418,54 @@ paths:
                 DELETE_ORDER:
                   value: "success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
 components:
   schemas:
-    OrderDetails:
+    ProductInventory:
+      type: integer
+      minimum: 1
+      maximum: 101
+
+    ProductType:
+      type: string
+      title: Product Type
+      enum:
+        - book
+        - food
+        - gadget
+        - other
+
+    Id:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+        - id
+
+    ProductBase:
+      title: Product Details
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductType'
+        inventory:
+          $ref: '#/components/schemas/ProductInventory'
+      required:
+        - name
+        - type
+        - inventory
+
+    Product:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ProductBase'
+
+    OrderBase:
       title: Order Details
       type: object
       properties:
@@ -469,30 +477,66 @@ components:
         - productid
         - count
 
-    OrderUpdate:
+    OrderStatus:
+      type: string
+      title: OrderStatus
+      enum:
+        - fulfilled
+        - pending
+        - cancelled
+    
+    Order:
       allOf:
-        - $ref: '#/components/schemas/OrderDetails'
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/OrderBase'
         - type: object
           properties:
             status:
-              $ref: './common.yaml#/components/schemas/OrderStatus'
+              $ref: '#/components/schemas/OrderStatus'
+          required:
+            - status
+
+    OrderUpdate:
+      allOf:
+        - $ref: '#/components/schemas/OrderBase'
+        - type: object
+          properties:
+            status:
+              $ref: '#/components/schemas/OrderStatus'
+          required:
+            - status
 
     IdempotencyKey:
       type: string
       format: uuid
 
     ErrorResponseBody:
+      title: Bad Request
+      type: object
       properties:
-        id:
-          type: number
         timestamp:
           type: string
         status:
-          type: number
+          type: integer
         error:
           type: string
         message:
           type: string
+  
+  responses:
+    NotFound:
+      description: "Not Found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponseBody"
+
+    BadRequest:
+      description: "Bad Request"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponseBody"
 
   securitySchemes:
     ApiKeyAuth:
