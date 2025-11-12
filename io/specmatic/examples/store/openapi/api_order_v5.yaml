@@ -1,0 +1,545 @@
+openapi: 3.0.1
+info:
+  title: Order API
+  description: Sample Order API
+  version: '5.0'
+  contact:
+    email: devs@specmatic.io
+servers:
+  - url: "http://localhost:3000"
+tags:
+  - name: Product
+    description: Product Related APIs
+  - name: Order
+    description: Order Related APIs
+paths:
+  "/products/{id}":
+    parameters:
+      - name: id
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          GET_PRODUCT:
+            value: 10
+          UPDATE_PRODUCT:
+            value: 10
+          DELETE_PRODUCT:
+            value: 20
+          INVALID_ID:
+            value: "344"
+    get:
+      description: Fetch product details
+      operationId: get-products-id
+      tags:
+      - Product
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+              examples:
+                GET_PRODUCT:
+                  value:
+                    name: "XYZ Phone"
+                    type: "gadget"
+                    inventory: 10
+                    id: 10
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      description: Update product details
+      operationId: patch-products-id
+      tags:
+      - Product
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductBase"
+            examples:
+              UPDATE_PRODUCT:
+                value:
+                  name: "XYZ Fone"
+                  type: "gadget"
+                  inventory: 10
+      responses:
+        "200":
+          description: Update successful
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                UPDATE_PRODUCT:
+                  value: "success"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      description: Delete a product
+      tags:
+      - Product
+      operationId: delete-products-id
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Deletion successful
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                DELETE_PRODUCT:
+                  value: "success"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/products/{id}/image":
+    put:
+      description: Update or upload a product image
+      operationId: updateProductImage
+      tags:
+      - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          examples:
+            UPDATE_IMAGE:
+              value: 10
+      requestBody:
+        description: Image file to be associated with the product
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: The image file to upload
+            encoding:
+              image:
+                contentType: image/png, image/jpeg
+            examples:
+              UPDATE_IMAGE:
+                value:
+                  image:
+                    externalValue: ".specmatic/repos/specmatic-order-contracts/io/specmatic/examples/store/openapi/box_image.jpg"
+      responses:
+        "200":
+          description: Product image updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                UPDATE_IMAGE:
+                  value:
+                    message: "Success"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /products:
+    get:
+      description: GET Products based on type
+      operationId: get-products
+      tags:
+      - Product
+      parameters:
+        - name: type
+          in: query
+          schema:
+            $ref: "#/components/schemas/ProductType"
+      responses:
+        "200":
+          description: List of products in the response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+    post:
+      description: POST products
+      operationId: post-products
+      tags:
+      - Product
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            $ref: "#/components/schemas/IdempotencyKey"
+          examples:
+            CREATE_PRODUCT:
+                value: (uuid)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductBase"
+            examples:
+                CREATE_PRODUCT:
+                  value:
+                    name: "XYZ Phone"
+                    type: "gadget"
+                    inventory: 10
+      responses:
+        "201":
+          description: POST /products
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Id"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /orders:
+    post:
+      description: POST /orders
+      operationId: post-orders
+      tags:
+      - Order
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            $ref: "#/components/schemas/IdempotencyKey"
+          examples:
+            CREATE_ORDER:
+                value: (uuid)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderBase"
+            examples:
+              CREATE_ORDER:
+                value:
+                  productid: 10
+                  count: 2
+      responses:
+        "201":
+          description: POST /orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Id"
+              examples:
+                CREATE_ORDER:
+                  value:
+                    id: 10
+        "400":
+          $ref: "#/components/responses/BadRequest"
+    get:
+      description: Search for orders
+      operationId: get-orders
+      tags:
+      - Order
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+              examples:
+                200_OK:
+                  value:
+                    - productid: 10
+                      count: 2
+                      status: "pending"
+                      id: 10
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /orders/bulk:
+    post:
+      description: Create multiple orders in bulk
+      operationId: post-orders-bulk
+      tags:
+      - Order
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            $ref: "#/components/schemas/IdempotencyKey"
+          examples:
+            BULK_CREATE_ORDERS:
+                value: (uuid)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/OrderBase"
+            examples:
+              BULK_CREATE_ORDERS:
+                value:
+                  - productid: 10
+                    count: 1
+                  - productid: 30
+                    count: 2
+      responses:
+        "200":
+          description: Orders created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Id"
+              examples:
+                BULK_CREATE_ORDERS:
+                  value:
+                    - id: 10
+                    - id: 30
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  "/orders/{id}":
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+        examples:
+          GET_ORDER:
+            value: 10
+          UPDATE_ORDER:
+            value: 10
+          DELETE_ORDER:
+            value: 20
+          INVALID_ID:
+            value: 433
+    get:
+      description: Fetch order details
+      operationId: get-orders-id
+      tags:
+      - Order
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+              examples:
+                GET_ORDER:
+                  value:
+                    productid: 10
+                    count: 2
+                    status: "pending"
+                    id: 10
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      description: Update order details
+      operationId: patch-orders-id
+      tags:
+      - Order
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderUpdate"
+            examples:
+              UPDATE_ORDER:
+                value:
+                  productid: 10
+                  count: 1
+                  status: pending
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                UPDATE_ORDER:
+                  value: "success"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      description: Cancel an order
+      operationId: delete-orders-id
+      tags:
+      - Order
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Cancel successful
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                DELETE_ORDER:
+                  value: "success"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+components:
+  schemas:
+    ProductInventory:
+      type: integer
+      minimum: 1
+      maximum: 101
+
+    ProductType:
+      type: string
+      title: Product Type
+      enum:
+        - book
+        - food
+        - gadget
+        - other
+
+    Id:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+        - id
+
+    ProductBase:
+      title: Product Details
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductType'
+        inventory:
+          $ref: '#/components/schemas/ProductInventory'
+      required:
+        - name
+        - type
+        - inventory
+
+    Product:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ProductBase'
+
+    OrderBase:
+      title: Order Details
+      type: object
+      properties:
+        productid:
+          type: integer
+        count:
+          type: integer
+      required:
+        - productid
+        - count
+
+    OrderStatus:
+      type: string
+      title: OrderStatus
+      enum:
+        - fulfilled
+        - pending
+        - cancelled
+    
+    Order:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/OrderBase'
+        - type: object
+          properties:
+            status:
+              $ref: '#/components/schemas/OrderStatus'
+          required:
+            - status
+
+    OrderUpdate:
+      allOf:
+        - $ref: '#/components/schemas/OrderBase'
+        - type: object
+          properties:
+            status:
+              $ref: '#/components/schemas/OrderStatus'
+          required:
+            - status
+
+    IdempotencyKey:
+      type: string
+      format: uuid
+
+    ErrorResponseBody:
+      title: Bad Request
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+  
+  responses:
+    NotFound:
+      description: "Not Found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponseBody"
+
+    BadRequest:
+      description: "Bad Request"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponseBody"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authenticate
