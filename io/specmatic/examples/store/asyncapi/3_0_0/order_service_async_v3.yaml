@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 servers:
   development_kafka:
-    host: localhost:1234
+    host: localhost:9092
     protocol: kafka
     security:
       - type: userPassword
@@ -13,7 +13,7 @@ servers:
           username: admin
           password: admin-secret
   development_pub_sub:
-    host: localhost:1234
+    host: localhost:9092
     protocol: googlepubsub
     security:
       - type: oauth2
