@@ -2,33 +2,33 @@ asyncapi: 3.0.0
 info:
   title: Order API
   version: 1.0.0
-servers:
-  development_kafka:
-    host: localhost:9092
-    protocol: kafka
-    security:
-      - type: userPassword
-        description: SASL/PLAIN security
-        x-sasl:
-          username: admin
-          password: admin-secret
-  development_pub_sub:
-    host: localhost:9092
-    protocol: googlepubsub
-    security:
-      - type: oauth2
-        description: Google Pub/Sub security using OAuth 2.0 client credentials flow.
-        flows:
-          clientCredentials:
-            tokenUrl: https://oauth2.googleapis.com/token
-            availableScopes:
-              pubsub.read: Read access to Pub/Sub topics
-              pubsub.write: Write access to Pub/Sub topics
-        scopes:
-          - pubsub.read
-          - pubsub.write
-        x-pubsub:
-          credentialsPath: '~/.config/gcloud/application_default_credentials.json'
+# servers:
+#   development_kafka:
+#     host: localhost:9092
+#     protocol: kafka
+#     security:
+#       - type: userPassword
+#         description: SASL/PLAIN security
+#         x-sasl:
+#           username: admin
+#           password: admin-secret
+#   development_pub_sub:
+#     host: localhost:9092
+#     protocol: googlepubsub
+#     security:
+#       - type: oauth2
+#         description: Google Pub/Sub security using OAuth 2.0 client credentials flow.
+#         flows:
+#           clientCredentials:
+#             tokenUrl: https://oauth2.googleapis.com/token
+#             availableScopes:
+#               pubsub.read: Read access to Pub/Sub topics
+#               pubsub.write: Write access to Pub/Sub topics
+#         scopes:
+#           - pubsub.read
+#           - pubsub.write
+#         x-pubsub:
+#           credentialsPath: '~/.config/gcloud/application_default_credentials.json'
 channels:
   NewOrderPlaced:
     address: new-orders
