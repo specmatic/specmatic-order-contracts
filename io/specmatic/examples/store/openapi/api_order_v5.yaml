@@ -218,6 +218,8 @@ paths:
                 $ref: "#/components/schemas/Id"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
   /orders:
     post:
       description: POST /orders
@@ -258,6 +260,8 @@ paths:
                     id: 10
         "400":
           $ref: "#/components/responses/BadRequest"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
     get:
       description: Search for orders
       operationId: get-orders
@@ -329,6 +333,8 @@ paths:
                     - id: 30
         "400":
           $ref: "#/components/responses/BadRequest"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
   "/orders/{id}":
     parameters:
       - schema:
@@ -533,6 +539,13 @@ components:
 
     BadRequest:
       description: "Bad Request"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponseBody"
+    
+    UnprocessableEntity:
+      description: "Unprocessable Entity"
       content:
         application/json:
           schema:
