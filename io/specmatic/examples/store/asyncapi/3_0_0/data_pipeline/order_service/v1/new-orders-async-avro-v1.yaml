@@ -1,0 +1,45 @@
+asyncapi: 3.0.0
+info:
+  title: Order API
+  version: 1.0.0
+channels:
+  new-orders:
+    address: new-orders
+    messages:
+      placeOrder.message:
+        $ref: '#/components/messages/OrderRequest'
+operations:
+  placeOrder:
+    action: receive
+    channel:
+      $ref: '#/channels/new-orders'
+    messages:
+      - $ref: '#/channels/new-orders/messages/placeOrder.message'
+components:
+  messages:
+    OrderRequest:
+      name: OrderRequest
+      title: An order request
+      correlationId:
+        $ref: "#/components/correlationIds/orderCorrelation"
+      headers:
+        $ref: '#/components/schemas/OrderHeaders'
+      payload:
+        schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+        schema:
+          $ref: '<SCHEMA_REGISTRY_URL>/subjects/new-orders-value/versions/1/schema'
+
+  correlationIds:
+    orderCorrelation:
+      description: Correlation ID for order processing
+      location: $message.header#/orderRequestId
+
+  schemas:
+    OrderHeaders:
+      type: object
+      required:
+        - orderRequestId
+      properties:
+        orderRequestId:
+          type: number
+          description: Correlation ID matching the request

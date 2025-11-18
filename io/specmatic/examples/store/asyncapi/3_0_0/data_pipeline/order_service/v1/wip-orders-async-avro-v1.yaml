@@ -1,0 +1,45 @@
+asyncapi: 3.0.0
+info:
+  title: Order API
+  version: 1.0.0
+channels:
+  wip-orders:
+    address: wip-orders
+    messages:
+      wipOrder.message:
+        $ref: '#/components/messages/WipOrder'
+operations:
+  processOrder:
+    action: receive
+    channel:
+      $ref: '#/channels/wip-orders'
+    messages:
+      - $ref: '#/channels/wip-orders/messages/wipOrder.message'
+components:
+  messages:
+    WipOrder:
+      name: WipOrder
+      title: An order that needs to be processed
+      correlationId:
+        $ref: "#/components/correlationIds/orderCorrelation"
+      headers:
+        $ref: '#/components/schemas/OrderHeaders'
+      payload:
+        schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+        schema:
+          $ref: '<SCHEMA_REGISTRY_URL>/subjects/wip-orders-value/versions/1/schema'
+
+  correlationIds:
+    orderCorrelation:
+      description: Correlation ID for order processing
+      location: $message.header#/orderRequestId
+
+  schemas:
+    OrderHeaders:
+      type: object
+      required:
+        - orderRequestId
+      properties:
+        orderRequestId:
+          type: number
+          description: Correlation ID matching the request
