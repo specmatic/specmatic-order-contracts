@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: Create Order API
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /orders:
+    post:
+      summary: Create a new order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productid
+                - count
+              properties:
+                productid:
+                  type: integer
+                count:
+                  type: integer
+            examples:
+              SUCCESS:
+                value:
+                  productid: 1
+                  count: 2
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: integer
+              examples:
+                SUCCESS:
+                  value:
+                    id: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '503':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+components:
+  schemas:
+    BadRequest:
+      title: Bad Request
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: number
+        error:
+          type: string
+        message:
+          type: string
