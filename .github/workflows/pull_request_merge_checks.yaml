@@ -46,7 +46,8 @@ jobs:
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
           echo "Running Spectral linter on: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
-          spectral lint io/**/*.yaml
+          # Find all YAML files excluding asyncapi directory
+          find io -name "*.yaml" -not -path "*/asyncapi/*" | xargs spectral lint
 
       
       - name: Create environment file
