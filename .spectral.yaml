@@ -3,4 +3,7 @@ rules:
   path-keys-no-trailing-slash: error
   oas3-valid-media-example: warn
 
-formats: ['oas2', 'oas3', 'oas3.0', 'oas3.1']
+overrides:
+  - files:
+      - "io/specmatic/examples/store/asyncapi/**"
+    rules: {}
