@@ -61,7 +61,7 @@ paths:
   /findAvailableProducts:
     parameters:
       - schema:
-          type: string
+          $ref : '#/components/schemas/ProductType'
         name: type
         in: query
         required: false
