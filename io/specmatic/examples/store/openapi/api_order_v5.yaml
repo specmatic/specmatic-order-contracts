@@ -441,6 +441,8 @@ components:
 
     CreationTime:
       type: object
+      required:
+      - createdOn
       properties:
         createdOn:
           type: string
