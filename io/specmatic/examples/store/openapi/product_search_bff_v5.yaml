@@ -81,7 +81,7 @@ paths:
         schema:
           type: string
           format: date-time
-        required: false
+        required: true
         description: Filter products created from this date
         examples:
           SUCCESS:
@@ -91,7 +91,7 @@ paths:
         schema:
           type: string
           format: date-time
-        required: false
+        required: true
         description: Filter products created by this date
         examples:
           SUCCESS:
