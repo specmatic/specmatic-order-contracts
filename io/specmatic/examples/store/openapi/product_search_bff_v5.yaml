@@ -245,10 +245,19 @@ components:
         - name
         - type
         - inventory
+    CreatedOn:
+        type: object
+        required:
+          - createdOn
+        properties:
+          createdOn:
+            type: string
+            format: date-time
     Product:
       allOf:
         - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/ProductBase'
+        - $ref: '#/components/schemas/CreatedOn'
     OrderBase:
       title: Order Details
       type: object
