@@ -48,7 +48,7 @@ paths:
                     name: "XYZ Phone"
                     type: "gadget"
                     inventory: 10
-                    createdOn: "2023-10-01T12:00:00Z"
+                    createdOn: "2023-10-01"
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
