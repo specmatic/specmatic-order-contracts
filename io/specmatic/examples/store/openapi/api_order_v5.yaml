@@ -182,13 +182,13 @@ paths:
           required: false
           schema:
             type: string
-            format: date-time
+            format: date
         - name: to-date
           in: query
           required: false
           schema:
             type: string
-            format: date-time
+            format: date
       responses:
         "200":
           description: List of products in the response
@@ -447,7 +447,7 @@ components:
       properties:
         createdOn:
           type: string
-          format: date-time
+          format: date
 
     OrderBase:
       title: Order Details
