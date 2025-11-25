@@ -176,6 +176,18 @@ paths:
           required: false
           schema:
             type: integer
+        - name: from-date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: to-date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         "200":
           description: List of products in the response
