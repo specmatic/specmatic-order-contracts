@@ -437,6 +437,14 @@ components:
       allOf:
         - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/ProductBase'
+        - $ref: '#/components/schemas/CreationTime'
+
+    CreationTime:
+      type: object
+      properties:
+        createdOn:
+          type: string
+          format: date-time
 
     OrderBase:
       title: Order Details
