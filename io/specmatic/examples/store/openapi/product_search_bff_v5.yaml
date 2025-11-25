@@ -80,7 +80,7 @@ paths:
         in: query
         schema:
           type: string
-          format: date-time
+          format: date
         required: true
         description: Filter products created from this date
         examples:
@@ -90,7 +90,7 @@ paths:
         in: query
         schema:
           type: string
-          format: date-time
+          format: date
         required: true
         description: Filter products created by this date
         examples:
@@ -117,7 +117,7 @@ paths:
                       id: 1
                       type: gadget
                       inventory: 100
-                      createdOn: "2024-01-01T10:00:00Z"
+                      createdOn: "2024-01-01"
         '429':
           description: TooManyRequests
           headers:
@@ -273,7 +273,7 @@ components:
         properties:
           createdOn:
             type: string
-            format: date-time
+            format: date
     Product:
       allOf:
         - $ref: '#/components/schemas/Id'
