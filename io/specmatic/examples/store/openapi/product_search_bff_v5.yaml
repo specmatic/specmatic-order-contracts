@@ -97,6 +97,7 @@ paths:
                       id: 1
                       type: gadget
                       inventory: 100
+                      createdOn: "2024-01-01T10:00:00Z"
         '429':
           description: TooManyRequests
           headers:
