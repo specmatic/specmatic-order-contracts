@@ -95,7 +95,7 @@ paths:
         description: Filter products created by this date
         examples:
           SUCCESS:
-            value: "2025-11-27T00:00:00Z"
+            value: "2025-11-28T00:00:00Z"
     get:
       description: Find available products
       operationId: findAvailableProducts
