@@ -76,6 +76,26 @@ paths:
         examples:
           SUCCESS:
             value: 10
+      - name: from-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+        required: false
+        description: Filter products created from this date
+        examples:
+          SUCCESS:
+            value: "2025-01-01T00:00:00Z"
+      - name: to-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+        required: false
+        description: Filter products created by this date
+        examples:
+          SUCCESS:
+            value: "2026-01-01T00:00:00Z"
     get:
       description: Find available products
       operationId: findAvailableProducts
