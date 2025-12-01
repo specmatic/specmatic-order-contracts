@@ -1,0 +1,157 @@
+openapi: 3.0.1
+
+info:
+  title: Product Inventory API
+  description: Sample Product Inventory API
+  version: "5.0"
+  contact:
+    email: devs@specmatic.io
+
+servers:
+  - url: "http://localhost:3000"
+
+tags:
+  - name: Product
+    description: Product Related APIs
+
+paths:
+  /inventory:
+    post:
+      description: Create inventory for a product
+      operationId: createInventoryGeneric
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/InventoryCreateRequest"
+      responses:
+        "201":
+          description: Inventory created
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Inventory"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /inventory/{productId}:
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      description: Get current inventory for a product with the given productId
+      operationId: getInventory
+      tags:
+        - Product
+      responses:
+        "200":
+          description: Current inventory count
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Inventory"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      description: Update inventory count for a product with the given productId
+      operationId: updateInventory
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/InventoryUpdateRequest"
+      responses:
+        "200":
+          description: Inventory updated
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Inventory"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  schemas:
+    InventoryCreateRequest:
+      type: object
+      required:
+        - productId
+        - inventory
+      properties:
+        productId:
+          type: integer
+        inventory:
+          type: integer
+          minimum: 1
+          maximum: 101
+      xml:
+        name: InventoryCreateRequest
+
+    InventoryUpdateRequest:
+      type: object
+      required:
+        - inventory
+      properties:
+        inventory:
+          type: integer
+          minimum: 1
+          maximum: 101
+      xml:
+        name: InventoryUpdateRequest
+
+    Inventory:
+      type: object
+      required:
+        - productId
+        - inventory
+      properties:
+        productId:
+          type: integer
+        inventory:
+          type: integer
+          minimum: 1
+          maximum: 101
+      xml:
+        name: Inventory
+
+    Error:
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+      xml:
+        name: Error
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/xml:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    NotFound:
+      description: Product Not Found
+      content:
+        application/xml:
+          schema:
+            $ref: "#/components/schemas/Error"
