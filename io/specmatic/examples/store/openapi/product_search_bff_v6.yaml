@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Order BFF
   description: Sample Order BFF
-  version: '5.0'
+  version: '6.0'
   contact:
     email: devs@specmatic.io
 servers:
@@ -131,7 +131,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-  /ordres:
+  /orders:
     post:
       description: Create a new order
       operationId: createOrder

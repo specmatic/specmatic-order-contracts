@@ -44,10 +44,11 @@ paths:
               examples:
                 GET_PRODUCT:
                   value:
+                    id: 10
                     name: "XYZ Phone"
                     type: "gadget"
                     inventory: 10
-                    id: 10
+                    createdOn: "2023-10-01"
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
@@ -176,6 +177,18 @@ paths:
           required: false
           schema:
             type: integer
+        - name: from-date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: to-date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
       responses:
         "200":
           description: List of products in the response
@@ -425,6 +438,16 @@ components:
       allOf:
         - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/ProductBase'
+        - $ref: '#/components/schemas/CreationTime'
+
+    CreationTime:
+      type: object
+      required:
+      - createdOn
+      properties:
+        createdOn:
+          type: string
+          format: date
 
     OrderBase:
       title: Order Details
