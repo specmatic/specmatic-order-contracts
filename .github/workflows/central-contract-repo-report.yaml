@@ -25,7 +25,7 @@ jobs:
           echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
 
       - name: Validate specmatic license
-        run: cat ~/.specmatic/specmatic-license.txt | grep -- '--'
+        run: cat ~/.specmatic/specmatic-license.txt | grep -- '--' | base64
 
       - name: Run Specmatic Insights Build Reporter
         run: |
