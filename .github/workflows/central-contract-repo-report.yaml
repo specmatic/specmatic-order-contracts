@@ -23,7 +23,15 @@ jobs:
         run: |
           mkdir -p ~/.specmatic
           echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
-  
+
+      - name: Validate specmatic license
+        run: |
+          docker run \
+            -v $(pwd):/usr/src/app \
+            -v ~/.specmatic:/root/.specmatic \
+            specmatic/specmatic \
+            show-license
+
       - name: Run Specmatic Insights Build Reporter
         run: |
           docker run \
