@@ -1,0 +1,18 @@
+{
+  "http-request": {
+    "method": "POST",
+    "path": "/ws",
+    "headers": {
+      "Content-Type": "text/xml",
+      "SOAPAction": "/getInventory"
+    },
+    "body": "<soapenv:Envelope xmlns:Inventory=\"http://www.example.com/inventory\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/><soapenv:Body><Inventory:GetInventoryRequest><Inventory:productid>1</Inventory:productid></Inventory:GetInventoryRequest></soapenv:Body></soapenv:Envelope>"
+  },
+  "http-response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "text/xml"
+    },
+    "body": "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><ns2:GetInventoryResponse xmlns:ns2=\"http://www.example.com/inventory\"><ns2:productid>1</ns2:productid><ns2:inventory>10</ns2:inventory></ns2:GetInventoryResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>"
+  }
+}
