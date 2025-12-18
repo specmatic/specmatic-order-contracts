@@ -1,0 +1,69 @@
+{
+  "name": "Bulk_Order_SQS_Kafka",
+  "receive": {
+    "topic": "place-order-queue",
+    "payload": {
+      "orderType": "BULK",
+      "batchId": "BATCH-90003",
+      "customerId": "CUST-99001",
+      "orders": [
+        {
+          "orderId": "ORD-BULK-001",
+          "items": [
+            {
+              "productId": "PROD-333",
+              "quantity": 10,
+              "price": 45.50
+            }
+          ],
+          "totalAmount": 455.00
+        },
+        {
+          "orderId": "ORD-BULK-002",
+          "items": [
+            {
+              "productId": "PROD-444",
+              "quantity": 5,
+              "price": 89.99
+            },
+            {
+              "productId": "PROD-555",
+              "quantity": 3,
+              "price": 249.99
+            }
+          ],
+          "totalAmount": 1199.92
+        },
+        {
+          "orderId": "ORD-BULK-003",
+          "items": [
+            {
+              "productId": "PROD-666",
+              "quantity": 20,
+              "price": 12.75
+            }
+          ],
+          "totalAmount": 255.00
+        }
+      ],
+      "totalOrderCount": 3,
+      "batchTotalAmount": 1909.92,
+      "orderDate": "2025-12-07T12:00:00Z"
+    },
+    "headers": {
+      "MessageGroupId": "bulk-order-group",
+      "Subject": "Bulk Order Placed",
+      "BatchId": "BATCH-90003"
+    }
+  },
+  "send": {
+    "topic": "place-order-topic",
+    "payload": {
+      "batchId": "BATCH-90003",
+      "itemsCount": "$match(exact: 4)",
+      "status": "$match(exact: COMPLETED)",
+      "completedAt": "(datetime)",
+      "customerConfirmation": "$match(exact: true)"
+    }
+  }
+}
