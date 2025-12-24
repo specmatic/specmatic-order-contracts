@@ -47,8 +47,6 @@ components:
           type: integer
         status:
           $ref: '#/components/schemas/OrderStatus'
-        misc:
-          type: string
       required:
         - productid
         - count
