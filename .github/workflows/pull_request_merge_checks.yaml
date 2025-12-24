@@ -73,7 +73,6 @@ jobs:
       - name: Validate OpenAPI examples
         run: |
           docker run -v "$(pwd):/usr/src/app" \
-            --env-file env.list \
             specmatic/specmatic \
             examples validate --specs-dir=io/specmatic/examples/store/openapi
 
@@ -90,6 +89,7 @@ jobs:
         if: steps.changed-graphqls-files.outputs.any_changed == 'true'
         run: |
           docker run -v "$(pwd):/usr/src/app" \
+            --user $(id -u):$(id -g) \
             --env-file env.list \
             specmatic/specmatic-graphql \
             backward-compatibility-check --target-path=io/specmatic/examples/store/graphql --base-branch origin/main
@@ -98,6 +98,7 @@ jobs:
         if: steps.changed-grpc-files.outputs.any_changed == 'true'
         run: |
           docker run -v "$(pwd):/usr/src/app" \
+            --user $(id -u):$(id -g) \
             --env-file env.list \
             specmatic/specmatic-grpc \
             backward-compatibility-check --target-path=io/specmatic/examples/store/grpc --base-branch origin/main
