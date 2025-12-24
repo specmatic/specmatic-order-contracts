@@ -24,7 +24,7 @@ jobs:
           mkdir -p ~/.specmatic
           echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
 
-      - name: Run Specmatic Insights Build Reporter
+      - name: Publish Build Report to Specmatic Insights
         run: |
           docker run \
             -v $(pwd):/usr/src/app \
