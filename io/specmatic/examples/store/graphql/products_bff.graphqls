@@ -21,16 +21,16 @@ type Mutation {
 
 scalar Date
 
-type Offer {
-  offerCode: String!
-  validUntil: Date!
-}
-
 type Product {
   id: ID!
   name: String!
   inventory: Int!
   type: ProductType!
+}
+
+type Offer {
+  offerCode: String!
+  validUntil: Date!
 }
 
 input NewProductInput {
