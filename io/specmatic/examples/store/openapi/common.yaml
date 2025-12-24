@@ -17,6 +17,7 @@ components:
     ProductType:
       type: string
       title: Product Type
+      description: Fixed set of product types
       enum:
         - book
         - food
