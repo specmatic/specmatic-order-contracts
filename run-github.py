@@ -1,7 +1,8 @@
-#!/usr/bin/env
+#!/usr/bin/env python3
 
 import json
 import os
+import shlex
 
 
 def read_event_data():
@@ -23,6 +24,7 @@ def log_call(fn):
 @log_call
 def get_commit_range(event_data):
     return (event_data['before'], event_data['after'])
+
 
 @log_call
 def get_commit_ids(event_data):
@@ -74,8 +76,15 @@ def to_meta_file_name(path):
 
 def invoke_pipeline(owner, repo, event_type, access_token_name):
     print(f"Invoking pipeline for owner {owner}, repo {repo}, type {event_type}")
-    payload = "{\"event_type\":\"" + event_type + "\"}"
-    command = f"curl -X POST -H \"Authorization: token ${access_token_name}\" -H 'Accept: application/vnd.github.v3+json' -d '{payload}' https://api.github.com/repos/{owner}/{repo}/dispatches"
+    payload = json.dumps({"event_type": event_type})
+    # build curl command in parts to avoid an overly long line and ensure proper quoting
+    headers = [
+        "-H", f"Authorization: token ${access_token_name}",
+        "-H", "Accept: application/vnd.github.v3+json"
+    ]
+    url = f"https://api.github.com/repos/{owner}/{repo}/dispatches"
+    command_parts = ["curl", "-X", "POST"] + headers + ["-d", shlex.quote(payload), url]
+    command = " ".join(command_parts)
     print(command)
     stream = os.popen(command)
     print(stream.read())
