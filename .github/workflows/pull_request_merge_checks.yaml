@@ -82,6 +82,7 @@ jobs:
         if: steps.changed-openapi-files.outputs.any_changed == 'true'
         run: |
           docker run -v "$(pwd):/usr/src/app" \
+            --user $(id -u):$(id -g) \
             --env-file env.list \
             specmatic/specmatic \
             backward-compatibility-check --target-path=io/specmatic/examples/store/openapi --base-branch=origin/main

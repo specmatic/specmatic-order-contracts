@@ -25,7 +25,6 @@ components:
         - other
     ProductId:
       title: Product Id
-      description: Product Identifier
       type: object
       properties:
         id:
