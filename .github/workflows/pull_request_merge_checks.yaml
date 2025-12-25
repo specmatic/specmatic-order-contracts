@@ -55,26 +55,23 @@ jobs:
         run: |
           echo "Running Spectral linter on: ${{ steps.changed-openapi-files.outputs.all_changed_files }}"
           # Find all YAML files in openapi sub-directory
-          find io -type f -path '*/openapi/*' -iname '*.yaml' | xargs spectral lint
-
-      - name: Create environment file
-        run: |
-          echo "GITHUB_SHA=${{ github.sha }}" >> env.list
-          echo "GITHUB_REPOSITORY=${{ github.repository }}" >> env.list
-          echo "GITHUB_ACTOR=${{ github.actor }}" >> env.list
-          echo "GITHUB_WORKFLOW=${{ github.workflow }}" >> env.list
-          echo "GITHUB_HEAD_REF=${{ github.head_ref }}" >> env.list
-          if [ -z "${{ github.base_ref }}" ]; then
-              echo "GITHUB_BASE_REF=${{ github.ref }}" | sed 's/refs\/heads\///' >> env.list
-          else
-            echo "GITHUB_BASE_REF=${{ github.base_ref }}" >> env.list
-          fi     
+          find io -type f -path '*/openapi/*' -iname '*.yaml' | xargs spectral lint     
 
       - name: Validate OpenAPI examples
         run: |
           docker run -v "$(pwd):/usr/src/app" \
             specmatic/specmatic \
             examples validate --specs-dir=io/specmatic/examples/store/openapi
+
+      - name: Create environment file
+        run: |
+          echo "GITHUB_SHA=${{ github.sha }}" >> env.list
+          echo "GITHUB_HEAD_REF=${{ github.head_ref }}" >> env.list
+          if [ -z "${{ github.base_ref }}" ]; then
+              echo "GITHUB_BASE_REF=${{ github.ref }}" | sed 's/refs\/heads\///' >> env.list
+          else
+            echo "GITHUB_BASE_REF=${{ github.base_ref }}" >> env.list
+          fi
 
       - name: Run OpenAPI backward compatibility check on changed files
         if: steps.changed-openapi-files.outputs.any_changed == 'true'
