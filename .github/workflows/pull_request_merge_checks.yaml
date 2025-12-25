@@ -60,9 +60,6 @@ jobs:
       - name: Create environment file
         run: |
           echo "GITHUB_SHA=${{ github.sha }}" >> env.list
-          echo "GITHUB_REPOSITORY=${{ github.repository }}" >> env.list
-          echo "GITHUB_ACTOR=${{ github.actor }}" >> env.list
-          echo "GITHUB_WORKFLOW=${{ github.workflow }}" >> env.list
           echo "GITHUB_HEAD_REF=${{ github.head_ref }}" >> env.list
           if [ -z "${{ github.base_ref }}" ]; then
               echo "GITHUB_BASE_REF=${{ github.ref }}" | sed 's/refs\/heads\///' >> env.list

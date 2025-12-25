@@ -54,6 +54,7 @@ components:
     OrderStatus:
       type: string
       title: OrderStatus
+      description: Order status can be one of fulfilled, pending or cancelled
       enum:
         - fulfilled
         - pending
