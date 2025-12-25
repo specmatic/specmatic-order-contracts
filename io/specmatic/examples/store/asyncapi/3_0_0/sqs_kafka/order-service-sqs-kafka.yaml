@@ -1,0 +1,462 @@
+asyncapi: 3.0.0
+info:
+  title: Order Service SNS-SQS API
+  version: 1.0.0
+  description: |
+    When a message is published on a sqs queue, the reply message is expected on a given kafka topic
+
+servers:
+  sqsServer:
+    host: 'http://localhost:4566/000000000000'
+    protocol: sqs
+    description: AWS SQS server for receiving messages
+  kafkaServer:
+    host: 'localhost:9092'
+    protocol: kafka
+    description: Kafka broker to which the reply message will be sent
+
+channels:
+  placeOrder:
+    address: place-order-queue
+    servers:
+      - $ref: '#/servers/sqsServer'
+    messages:
+      placeOrderMessage:
+        $ref: '#/components/messages/PlaceOrderMessage'
+      priorityPlaceOrderMessage:
+        $ref: '#/components/messages/PriorityPlaceOrderMessage'
+      bulkPlaceOrderMessage:
+        $ref: '#/components/messages/BulkPlaceOrderMessage'
+    description: SQS queue where the place order message will be received
+
+  wipOrder:
+    address: place-order-topic
+    servers:
+      - $ref: '#/servers/kafkaServer'
+    messages:
+      wipOrderMessage:
+        $ref: '#/components/messages/WipOrderMessage'
+      deliveredOrderMessage:
+        $ref: '#/components/messages/DeliveredOrderMessage'
+      completedOrderMessage:
+        $ref: '#/components/messages/CompletedOrderMessage'
+    description: Kafka topic where the WIP orders will be sent
+
+
+operations:
+  sendOrder:
+    description: Receive an order placement event on the SQS queue and reply with the WIP order message on the kafka topic
+    action: receive
+    channel:
+      $ref: '#/channels/placeOrder'
+    messages:
+      - $ref: '#/channels/placeOrder/messages/placeOrderMessage'
+      - $ref: '#/channels/placeOrder/messages/priorityPlaceOrderMessage'
+      - $ref: '#/channels/placeOrder/messages/bulkPlaceOrderMessage'
+    reply:
+      channel:
+        $ref: '#/channels/wipOrder'
+      messages:
+        - $ref: '#/channels/wipOrder/messages/wipOrderMessage'
+        - $ref: '#/channels/wipOrder/messages/deliveredOrderMessage'
+        - $ref: '#/channels/wipOrder/messages/completedOrderMessage'
+
+components:
+  messages:
+    PlaceOrderMessage:
+      name: PlaceOrderMessage
+      title: Order Created Event
+      summary: Event triggered when a new order is created
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          MessageGroupId:
+            type: string
+            description: FIFO message group ID
+            examples:
+              - order-group-1
+          Subject:
+            type: string
+            description: Message subject
+            examples:
+              - Order Placed
+      payload:
+        type: object
+        properties:
+          orderType:
+            type: string
+            description: Discriminator to identify the type of order message
+            enum:
+              - STANDARD
+            examples:
+              - STANDARD
+          orderId:
+            type: string
+            description: Unique identifier for the order
+            examples:
+              - ORD-12345
+          customerId:
+            type: string
+            description: Customer identifier
+            examples:
+              - CUST-67890
+          items:
+            type: array
+            description: List of items in the order
+            items:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  examples:
+                    - PROD-111
+                quantity:
+                  type: integer
+                  examples:
+                    - 2
+                price:
+                  type: number
+                  format: float
+                  examples:
+                    - 29.99
+          totalAmount:
+            type: number
+            format: float
+            description: Total order amount
+            examples:
+              - 59.98
+          orderDate:
+            type: string
+            format: date-time
+            description: Timestamp when order was placed
+            examples:
+              - '2025-12-08T10:30:00Z'
+        required:
+          - orderType
+          - orderId
+          - customerId
+          - items
+          - totalAmount
+          - orderDate
+
+    PriorityPlaceOrderMessage:
+      name: PriorityPlaceOrderMessage
+      title: Priority Order Created Event
+      summary: Event triggered when a priority order is created
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          MessageGroupId:
+            type: string
+            description: FIFO message group ID
+            examples:
+              - priority-order-group
+          Subject:
+            type: string
+            description: Message subject
+            examples:
+              - Priority Order Placed
+          Priority:
+            type: string
+            description: Priority level
+            enum:
+              - HIGH
+              - URGENT
+            examples:
+              - HIGH
+      payload:
+        type: object
+        properties:
+          orderType:
+            type: string
+            description: Discriminator to identify the type of order message
+            enum:
+              - PRIORITY
+            examples:
+              - PRIORITY
+          orderId:
+            type: string
+            description: Unique identifier for the order
+            examples:
+              - ORD-PRIORITY-12345
+          customerId:
+            type: string
+            description: Customer identifier
+            examples:
+              - CUST-67890
+          items:
+            type: array
+            description: List of items in the order
+            items:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  examples:
+                    - PROD-111
+                quantity:
+                  type: integer
+                  examples:
+                    - 2
+                price:
+                  type: number
+                  format: float
+                  examples:
+                    - 29.99
+          totalAmount:
+            type: number
+            format: float
+            description: Total order amount
+            examples:
+              - 59.98
+          orderDate:
+            type: string
+            format: date-time
+            description: Timestamp when order was placed
+            examples:
+              - '2025-12-08T10:30:00Z'
+          priorityLevel:
+            type: string
+            description: Priority level for expedited processing
+            enum:
+              - HIGH
+              - URGENT
+            examples:
+              - HIGH
+          expectedDeliveryDate:
+            type: string
+            format: date-time
+            description: Expected delivery date for priority order
+            examples:
+              - '2025-12-09T18:00:00Z'
+        required:
+          - orderType
+          - orderId
+          - customerId
+          - items
+          - totalAmount
+          - orderDate
+          - priorityLevel
+          - expectedDeliveryDate
+
+    BulkPlaceOrderMessage:
+      name: BulkPlaceOrderMessage
+      title: Bulk Order Created Event
+      summary: Event triggered when multiple orders are placed in bulk
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          MessageGroupId:
+            type: string
+            description: FIFO message group ID
+            examples:
+              - bulk-order-group
+          Subject:
+            type: string
+            description: Message subject
+            examples:
+              - Bulk Order Placed
+          BatchId:
+            type: string
+            description: Batch identifier for bulk orders
+            examples:
+              - BATCH-001
+      payload:
+        type: object
+        properties:
+          orderType:
+            type: string
+            description: Discriminator to identify the type of order message
+            enum:
+              - BULK
+            examples:
+              - BULK
+          batchId:
+            type: string
+            description: Unique identifier for the bulk order batch
+            examples:
+              - BATCH-001
+          customerId:
+            type: string
+            description: Customer identifier
+            examples:
+              - CUST-67890
+          orders:
+            type: array
+            description: List of orders in the bulk submission
+            items:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                  examples:
+                    - ORD-BULK-001
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productId:
+                        type: string
+                        examples:
+                          - PROD-111
+                      quantity:
+                        type: integer
+                        examples:
+                          - 10
+                      price:
+                        type: number
+                        format: float
+                        examples:
+                          - 29.99
+                totalAmount:
+                  type: number
+                  format: float
+                  examples:
+                    - 299.90
+          totalOrderCount:
+            type: integer
+            description: Total number of orders in the batch
+            examples:
+              - 5
+          batchTotalAmount:
+            type: number
+            format: float
+            description: Total amount for all orders in the batch
+            examples:
+              - 1499.50
+          orderDate:
+            type: string
+            format: date-time
+            description: Timestamp when bulk order was placed
+            examples:
+              - '2025-12-08T10:30:00Z'
+        required:
+          - orderType
+          - batchId
+          - customerId
+          - orders
+          - totalOrderCount
+          - batchTotalAmount
+          - orderDate
+
+    WipOrderMessage:
+      name: WipOrderMessage
+      title: Work In Progress Order Event
+      summary: Transformed order message with WIP status sent to Kafka
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          orderId:
+            type: string
+            description: Unique identifier for the order
+            examples:
+              - ORD-12345
+          itemsCount:
+            type: integer
+            description: Number of items in the order
+            examples:
+              - 2
+          status:
+            type: string
+            description: Current status of the order
+            enum:
+              - WIP
+            examples:
+              - WIP
+          processingStartedAt:
+            type: string
+            format: date-time
+            description: Timestamp when order processing started
+            examples:
+              - '2025-12-08T10:31:00Z'
+        required:
+          - orderId
+          - itemsCount
+          - status
+
+    DeliveredOrderMessage:
+      name: DeliveredOrderMessage
+      title: Delivered Order Event
+      summary: Order message with DELIVERED status sent to Kafka
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          orderId:
+            type: string
+            description: Unique identifier for the order
+            examples:
+              - ORD-12345
+          itemsCount:
+            type: integer
+            description: Number of items in the order
+            examples:
+              - 2
+          status:
+            type: string
+            description: Current status of the order
+            enum:
+              - DELIVERED
+            examples:
+              - DELIVERED
+          deliveredAt:
+            type: string
+            format: date-time
+            description: Timestamp when order was delivered
+            examples:
+              - '2025-12-09T15:30:00Z'
+          deliveryLocation:
+            type: string
+            description: Delivery location address
+            examples:
+              - 123 Main St, City, State 12345
+        required:
+          - orderId
+          - itemsCount
+          - status
+          - deliveredAt
+
+    CompletedOrderMessage:
+      name: CompletedOrderMessage
+      title: Completed Order Event
+      summary: Order message with COMPLETED status sent to Kafka
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          batchId:
+            type: string
+            description: Unique identifier for the batch of orders
+          itemsCount:
+            type: integer
+            description: Number of items in the order
+            examples:
+              - 2
+          status:
+            type: string
+            description: Current status of the order
+            enum:
+              - COMPLETED
+            examples:
+              - COMPLETED
+          completedAt:
+            type: string
+            format: date-time
+            description: Timestamp when order was completed
+            examples:
+              - '2025-12-10T09:00:00Z'
+          customerConfirmation:
+            type: boolean
+            description: Whether customer confirmed receipt
+            examples:
+              - true
+        required:
+          - orderId
+          - itemsCount
+          - status
+          - completedAt

@@ -1,0 +1,42 @@
+{
+  "name": "Priority_Order_SQS_Kafka",
+  "receive": {
+    "topic": "place-order-queue",
+    "payload": {
+      "orderType": "PRIORITY",
+      "orderId": "ORD-PRIORITY-90002",
+      "customerId": "CUST-77889",
+      "items": [
+        {
+          "productId": "PROD-555",
+          "quantity": 3,
+          "price": 249.99
+        },
+        {
+          "productId": "PROD-666",
+          "quantity": 1,
+          "price": 599.00
+        }
+      ],
+      "totalAmount": 1348.97,
+      "orderDate": "2025-12-09T08:00:00Z",
+      "priorityLevel": "URGENT",
+      "expectedDeliveryDate": "2025-12-09T20:00:00Z"
+    },
+    "headers": {
+      "MessageGroupId": "priority-order-group",
+      "Subject": "Priority Order Placed",
+      "Priority": "URGENT"
+    }
+  },
+  "send": {
+    "topic": "place-order-topic",
+    "payload": {
+      "orderId": "ORD-PRIORITY-90002",
+      "itemsCount": "$match(exact: 2)",
+      "status": "$match(exact: DELIVERED)",
+      "deliveredAt": "(datetime)",
+      "deliveryLocation": "(string)"
+    }
+  }
+}
