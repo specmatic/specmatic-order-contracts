@@ -63,22 +63,11 @@ jobs:
             specmatic/specmatic \
             examples validate --specs-dir=io/specmatic/examples/store/openapi
 
-      - name: Create environment file
-        run: |
-          echo "GITHUB_SHA=${{ github.sha }}" >> env.list
-          echo "GITHUB_HEAD_REF=${{ github.head_ref }}" >> env.list
-          if [ -z "${{ github.base_ref }}" ]; then
-              echo "GITHUB_BASE_REF=${{ github.ref }}" | sed 's/refs\/heads\///' >> env.list
-          else
-            echo "GITHUB_BASE_REF=${{ github.base_ref }}" >> env.list
-          fi
-
       - name: Run OpenAPI backward compatibility check on changed files
         if: steps.changed-openapi-files.outputs.any_changed == 'true'
         run: |
           docker run -v "$(pwd):/usr/src/app" \
             --user $(id -u):$(id -g) \
-            --env-file env.list \
             specmatic/specmatic \
             backward-compatibility-check --target-path=io/specmatic/examples/store/openapi --base-branch=origin/main
 

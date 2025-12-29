@@ -22,7 +22,6 @@ components:
         - book
         - food
         - gadget
-        - other
     ProductId:
       title: Product Id
       type: object
