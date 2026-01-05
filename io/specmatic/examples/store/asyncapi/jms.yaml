@@ -1,18 +1,29 @@
-asyncapi: 2.6.0
+asyncapi: 3.0.0
+
 info:
   title: Product audits API
   version: '1.0.0'
+
 servers:
   active-mq:
-    url: tcp://localhost:9127
+    host: tcp://localhost:9127
     protocol: jms
+
 channels:
   product-queries:
-    publish:
-      operationId: publishObjectMessage
-      message:
-        payload:
-          $ref: "#/components/messages/product"
+    address: product-queries
+    messages:
+      product:
+        $ref: '#/components/messages/product'
+
+operations:
+  receiveProductQuery:
+    action: receive
+    channel:
+      $ref: '#/channels/product-queries'
+    messages:
+      - $ref: '#/channels/product-queries/messages/product'
+
 components:
   messages:
     product:
@@ -36,15 +47,15 @@ components:
             description: A list of product categories
             type: array
             items:
-              $ref: "#/components/schemas/category"
+              $ref: '#/components/schemas/category'
+
   schemas:
     category:
       type: object
       properties:
         id:
-           description: The id of the category
-           type: integer
+          description: The id of the category
+          type: integer
         name:
           description: The name of the category
           type: string
-
