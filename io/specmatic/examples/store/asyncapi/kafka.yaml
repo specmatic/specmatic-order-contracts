@@ -2,16 +2,18 @@ asyncapi: 3.0.0
 info:
   title: Product audits API
   version: 1.0.0
-# servers:
-#   kafka-dev:
-#     host: 'localhost:61616'
-#     protocol: kafka
+servers:
+  kafka-server:
+    host: 'localhost:9092'
+    protocol: kafka
 channels:
   product-queries:
     address: product-queries
     messages:
       publishObjectMessage.message:
         $ref: '#/components/messages/product'
+    servers:
+      - $ref: '#/servers/kafka-server'
 operations:
   publishObjectMessage:
     action: receive
