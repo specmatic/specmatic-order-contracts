@@ -62,7 +62,7 @@
       "batchId": "BATCH-90003",
       "itemsCount": "$match(exact: 4)",
       "status": "$match(exact: COMPLETED)",
-      "completedAt": "(datetime)",
+      "completedAt": "$match(dataType: datetime)",
       "customerConfirmation": "$match(exact: true)"
     }
   }
