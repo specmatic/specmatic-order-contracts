@@ -1,0 +1,6 @@
+version: 2
+contracts:
+  - provides:
+     - order_bff.proto
+  - consumes:
+     - order_bff.proto

@@ -1,0 +1,1 @@
+[{"type":"filesystem","repository":null,"branch":null,"specification":"order_bff.proto","serviceType":"GRPC","operations":[{"service":"OrderService","rpc":"findAvailableProducts","count":1},{"service":"OrderService","rpc":"createOrder","count":1},{"service":"OrderService","rpc":"createProduct","count":1}]}]

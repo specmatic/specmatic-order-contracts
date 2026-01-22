@@ -236,11 +236,11 @@ components:
     ProductType:
       type: string
       title: Product Type
-#      enum:
-#        - book
-#        - food
-#        - gadget
-#        - other
+      enum:
+        - book
+        - food
+        - gadget
+        - other
     MonitorLink:
       type: string
       description: Monitor link to check status
@@ -252,26 +252,6 @@ components:
           type: integer
       required:
         - id
-    ProductBaseResponse:
-      title: Product Details
-      type: object
-      properties:
-        name:
-          type: string
-        type:
-            type: string
-            title: Product Type
-            enum:
-              - book
-              - food
-              - gadget
-              - other
-        inventory:
-          $ref: '#/components/schemas/ProductInventory'
-      required:
-        - name
-        - type
-        - inventory
     ProductBase:
       title: Product Details
       type: object
@@ -287,17 +267,17 @@ components:
         - type
         - inventory
     CreatedOn:
-      type: object
-      required:
-        - createdOn
-      properties:
-        createdOn:
-          type: string
-          format: date
+        type: object
+        required:
+          - createdOn
+        properties:
+          createdOn:
+            type: string
+            format: date
     Product:
       allOf:
         - $ref: '#/components/schemas/Id'
-        - $ref: '#/components/schemas/ProductBaseResponse'
+        - $ref: '#/components/schemas/ProductBase'
         - $ref: '#/components/schemas/CreatedOn'
     OrderBase:
       title: Order Details
