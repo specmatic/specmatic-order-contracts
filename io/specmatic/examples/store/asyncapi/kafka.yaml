@@ -28,6 +28,16 @@ components:
       title: An inventory product
       summary: Product representing items in inventory
       contentType: application/json
+      headers:
+        type: object
+        required:
+          - correlationId
+        properties:
+          correlationId:
+            description: Correlation id used to match the product search request and emitted event
+            type: string
+      correlationId:
+        $ref: '#/components/correlationIds/productCorrelationId'
       payload:
         type: object
         properties:
@@ -55,3 +65,6 @@ components:
         name:
           description: The name of the category
           type: string
+  correlationIds:
+    productCorrelationId:
+      location: '$message.header#/correlationId'

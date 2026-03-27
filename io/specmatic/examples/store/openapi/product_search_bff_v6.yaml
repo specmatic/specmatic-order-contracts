@@ -76,6 +76,15 @@ paths:
         examples:
           SUCCESS:
             value: 10
+      - name: correlationId
+        in: header
+        schema:
+          type: string
+        required: true
+        description: Correlation id used to match the published product query message
+        examples:
+          SUCCESS:
+            value: corr-000
       - name: from-date
         in: query
         schema:
