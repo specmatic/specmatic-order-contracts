@@ -72,6 +72,7 @@ paths:
         "400":
           $ref: "./common_responses.yaml#/components/responses/BadRequest"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -180,6 +181,7 @@ paths:
       security:
         - ApiKeyAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -199,6 +201,7 @@ paths:
       security:
         - ApiKeyAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -327,6 +330,7 @@ paths:
         "400":
           $ref: "./common_responses.yaml#/components/responses/BadRequest"
       requestBody:
+        required: true
         content:
           application/json:
             schema:

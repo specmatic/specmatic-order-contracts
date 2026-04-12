@@ -9,6 +9,7 @@ paths:
     summary: Create a new product
     post:
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -147,4 +148,3 @@ components:
           type: string
         message:
           type: string
-

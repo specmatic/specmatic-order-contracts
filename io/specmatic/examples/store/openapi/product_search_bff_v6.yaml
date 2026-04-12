@@ -25,6 +25,7 @@ paths:
       tags:
         - Product
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -138,6 +139,7 @@ paths:
       tags:
         - Order
       requestBody:
+        required: true
         content:
           application/json:
             schema:

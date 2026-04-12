@@ -30,6 +30,7 @@ paths:
         - Products
       operationId: updateProduct
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -56,6 +57,7 @@ paths:
         - Products
       operationId: createProduct
       requestBody:
+        required: true
         content:
           application/json:
             schema:

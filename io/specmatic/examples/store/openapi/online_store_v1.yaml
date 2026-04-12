@@ -39,6 +39,7 @@ paths:
             ADD_PRODUCTS_TO_STORE:
               value: 1
       requestBody:
+        required: true
         content:
           text/plain:
             schema:

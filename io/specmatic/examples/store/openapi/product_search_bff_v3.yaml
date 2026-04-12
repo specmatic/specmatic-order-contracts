@@ -9,6 +9,7 @@ paths:
     summary: Create a new product
     post:
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -94,6 +95,7 @@ paths:
     post:
       summary: Create a new order
       requestBody:
+        required: true
         content:
           application/json:
             schema:

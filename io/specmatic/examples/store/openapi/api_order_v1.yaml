@@ -111,6 +111,7 @@ paths:
                   path:
                     type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -189,6 +190,7 @@ paths:
                   path:
                     type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -308,6 +310,7 @@ paths:
                   path:
                     type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -473,6 +476,7 @@ paths:
                   path:
                     type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -522,4 +526,3 @@ components:
       type: apiKey
       in: header
       name: Authenticate
-

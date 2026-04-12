@@ -61,6 +61,7 @@ paths:
       security:
         - ApiKeyAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -217,6 +218,7 @@ paths:
             CREATE_PRODUCT:
                 value: (uuid)
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -256,6 +258,7 @@ paths:
             CREATE_ORDER:
                 value: (uuid)
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -350,6 +353,7 @@ paths:
       security:
         - ApiKeyAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:

@@ -9,6 +9,7 @@ paths:
     post:
       summary: Create a new order
       requestBody:
+        required: true
         content:
           application/json:
             schema:
