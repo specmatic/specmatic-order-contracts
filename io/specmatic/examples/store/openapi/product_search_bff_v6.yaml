@@ -60,6 +60,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
   /findAvailableProducts:
     parameters:
       - schema:
@@ -175,6 +177,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
     get:
       summary: Retrieve orders
       description: Retrieve orders
@@ -367,3 +371,10 @@ components:
           type: string
         message:
           type: string
+  responses:
+    UnsupportedMediaType:
+      description: Unsupported Media Type
+      content:
+        application/json:
+          schema:
+            additionalProperties: true

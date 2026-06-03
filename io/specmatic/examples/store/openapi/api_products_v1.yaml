@@ -51,6 +51,8 @@ paths:
               examples:
                 200_UPDATE:
                   $ref: "#/components/examples/200_UPDATE"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
   "/products":
     post:
       summary: Add a new product
@@ -79,6 +81,8 @@ paths:
               examples:
                 200_ADD:
                   $ref: "#/components/examples/200_ADD"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
 components:
   schemas:
     Product:
@@ -103,6 +107,13 @@ components:
           type: integer
       required:
         - id
+  responses:
+    UnsupportedMediaType:
+      description: Unsupported Media Type
+      content:
+        application/json:
+          schema:
+            additionalProperties: true
   examples:
     200_UPDATE:
       value:

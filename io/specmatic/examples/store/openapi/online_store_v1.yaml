@@ -57,6 +57,8 @@ paths:
               examples:
                 ADD_PRODUCTS_TO_STORE:
                   value: 2
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
     get:
       summary: Find matching products in given store
       parameters:
@@ -89,3 +91,11 @@ paths:
               examples:
                 FIND_PRODUCTS:
                   value: ["Powder", "Soap"]
+components:
+  responses:
+    UnsupportedMediaType:
+      description: Unsupported Media Type
+      content:
+        application/json:
+          schema:
+            additionalProperties: true

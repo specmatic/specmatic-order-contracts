@@ -60,6 +60,8 @@ paths:
                 $ref: '#/components/schemas/UuidResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
         '500':
           description: Server Error
   /uuid/{uuid_type}/{uuid}:
@@ -133,6 +135,8 @@ paths:
           description: Not Found
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
         '500':
           description: Server Error
 components:
@@ -143,6 +147,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+    UnsupportedMediaTypeResponse:
+      description: Unsupported Media Type
+      content:
+        application/json:
+          schema:
+            additionalProperties: true
   parameters:
     UuidTypeQuery:
       name: uuid_type
