@@ -1,0 +1,30 @@
+{
+    "http-request": {
+        "path": "/products",
+        "method": "GET",
+        "query": {
+            "type": "book",
+            "from-date": "2026-12-31",
+            "to-date": "2026-12-31"
+        },
+        "headers": {
+            "pageSize": "123"
+        }
+    },
+    "http-response": {
+        "status": 200,
+        "body": [
+            {
+                "id": 123,
+                "type": "book",
+                "inventory": 100,
+                "createdOn": "2026-06-03",
+                "name": "Product from Central Repository"
+            }
+        ],
+        "status-text": "OK",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
