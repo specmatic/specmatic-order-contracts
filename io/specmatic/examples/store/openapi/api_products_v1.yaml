@@ -51,6 +51,8 @@ paths:
               examples:
                 200_UPDATE:
                   $ref: "#/components/examples/200_UPDATE"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
   "/products":
@@ -81,6 +83,8 @@ paths:
               examples:
                 200_ADD:
                   $ref: "#/components/examples/200_ADD"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
 components:
@@ -108,6 +112,12 @@ components:
       required:
         - id
   responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            additionalProperties: true
     UnsupportedMediaType:
       description: Unsupported Media Type
       content:
