@@ -135,8 +135,6 @@ paths:
           description: Not Found
         '400':
           $ref: '#/components/responses/BadRequestResponse'
-        '415':
-          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
         '500':
           description: Server Error
 components:

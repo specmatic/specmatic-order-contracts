@@ -212,12 +212,6 @@ paths:
                       productid: 1
                       count: 2
                       status: "completed"
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequest'
   /monitor/{id}:
     get:
       summary: Retrieve monitor by ID
