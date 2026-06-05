@@ -35,8 +35,14 @@ jobs:
       - name: Publish Build Report to Specmatic Insights
         run: |
           docker run \
-            -v $(pwd):/usr/src/app \
-            -v ~/.specmatic:/root/.specmatic \
+            --rm \
+            -e GIT_DISCOVERY_ACROSS_FILESYSTEM=1 \
+            -e GIT_CONFIG_COUNT=1 \
+            -e GIT_CONFIG_KEY_0=safe.directory \
+            -e GIT_CONFIG_VALUE_0=/usr/src/app \
+            -v "$(pwd):/usr/src/app" \
+            -v "${HOME}/.specmatic:/root/.specmatic:ro" \
+            -w /usr/src/app \
             specmatic/specmatic \
             send-report \
             --metadata build_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} \
