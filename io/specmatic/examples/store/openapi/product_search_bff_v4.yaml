@@ -11,6 +11,7 @@ paths:
   /products:
     summary: Create a new product
     post:
+      summary: Create a new product
       requestBody:
         required: true
         content:

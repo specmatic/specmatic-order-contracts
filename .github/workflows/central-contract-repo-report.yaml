@@ -13,16 +13,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Save Specmatic license
+        run: |
+          mkdir -p ~/.specmatic
+          echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
+
+      - name: Run Specmatic linter on OpenAPI specs
+        run: |
+          ./scripts/run-specmatic-openapi-linter.sh
+
       - name: Generate central contract repo report
         run: |
           docker run -v "$(pwd):/usr/src/app" \
             specmatic/specmatic \
             central-contract-repo-report
-
-      - name: Save Specmatic license
-        run: |
-          mkdir -p ~/.specmatic
-          echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
 
       - name: Show license
         run: |

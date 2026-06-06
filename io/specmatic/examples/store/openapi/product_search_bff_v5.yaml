@@ -8,18 +8,19 @@ info:
 servers:
   - url: http://localhost:8080
 tags:
-  - name: WIP
-    description: API still under development
-  - name: Product
-    description: Product Related APIs
-  - name: Order
-    description: Order Related APIs
   - name: Monitor
     description: Monitor Related APIs
+  - name: Order
+    description: Order Related APIs
+  - name: Product
+    description: Product Related APIs
+  - name: WIP
+    description: API still under development
 paths:
   /products:
     summary: Create a new product
     post:
+      summary: Create a new product
       description: Create a new product
       operationId: createProduct
       tags:
@@ -56,7 +57,7 @@ paths:
         '400':
           description: Bad Request
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
   /findAvailableProducts:
@@ -66,6 +67,7 @@ paths:
         name: type
         in: query
         required: false
+        description: Filter products by type.
         examples:
           SUCCESS:
             value: gadget
@@ -74,6 +76,7 @@ paths:
         schema:
           type: integer
         required: true
+        description: Number of products to return per page.
         examples:
           SUCCESS:
             value: 10
@@ -98,6 +101,7 @@ paths:
           SUCCESS:
             value: "2025-11-28"
     get:
+      summary: Find available products
       description: Find available products
       operationId: findAvailableProducts
       tags:
@@ -126,14 +130,19 @@ paths:
               schema:
                 type: integer
                 description: The number of seconds to wait before making the next request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
         '400':
           description: Bad Request
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
   /ordres:
     post:
+      summary: Create a new order
       description: Create a new order
       operationId: createOrder
       tags:
@@ -169,15 +178,15 @@ paths:
         '400':
           description: Bad Request
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
     get:
+      summary: Retrieve orders
       description: Retrieve orders
       operationId: getOrders
       tags:
         - WIP
-        - Order
       parameters:
         - in: query
           name: orderId
@@ -204,8 +213,15 @@ paths:
                       productid: 1
                       count: 2
                       status: "completed"
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
   /monitor/{id}:
     get:
+      summary: Retrieve a monitor
       description: Retrieves a Monitor by ID
       operationId: retrieveMonitor
       tags:
@@ -214,6 +230,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: Monitor identifier.
           schema:
             type: integer
       responses:
@@ -226,7 +243,7 @@ paths:
         '400':
           description: Bad Request
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
 components:
@@ -353,12 +370,26 @@ components:
     BadRequest:
       title: Bad Request
       type: object
+      required:
+        - type
+        - title
+        - status
       properties:
+        type:
+          type: string
+          example: https://example.com/problems/bad-request
+        title:
+          type: string
+          example: Bad Request
         timestamp:
           type: string
+          example: '2024-01-01T10:00:00Z'
         status:
           type: integer
+          example: 400
         error:
           type: string
+          example: Bad Request
         message:
           type: string
+          example: Validation failed

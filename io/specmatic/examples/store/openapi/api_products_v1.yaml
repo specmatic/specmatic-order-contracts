@@ -25,6 +25,7 @@ paths:
           200_UPDATE:
             value: 1
     put:
+      summary: Update a product
       description: Update a product
       tags:
         - Products
@@ -52,6 +53,7 @@ paths:
                   $ref: "#/components/examples/200_UPDATE"
   "/products":
     post:
+      summary: Add a new product
       description: Add a new product
       tags:
         - Products

@@ -28,11 +28,10 @@ Backward compatibility between API specifications is now automatically checked u
 
 ## Linting
 
-Below are the instructions to run the linter on your local machine
+Below is the instruction to run the OpenAPI linter on your local machine.
 
-* Install [spectral](https://github.com/stoplightio/spectral#-installation-and-usage)
-* Run below command inside the repo
 ```
-spectral lint **/*.yaml 
+./scripts/run-specmatic-openapi-linter.sh
 ```
-* Above command leverages .spectral.yaml
+
+This runs Specmatic Linter on all OpenAPI specs under `io/**/openapi` using the recommended ruleset from `specmatic-linter.yaml`.

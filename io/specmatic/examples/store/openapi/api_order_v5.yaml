@@ -20,6 +20,7 @@ paths:
           type: integer
         in: path
         required: true
+        description: Product identifier.
         examples:
           GET_PRODUCT:
             value: 10
@@ -30,6 +31,7 @@ paths:
           INVALID_ID:
             value: "344"
     get:
+      summary: Fetch product details
       description: Fetch product details
       operationId: get-products-id
       tags:
@@ -54,6 +56,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
+      summary: Update product details
       description: Update product details
       operationId: patch-products-id
       tags:
@@ -87,6 +90,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
     delete:
+      summary: Delete a product
       description: Delete a product
       tags:
       - Product
@@ -109,6 +113,7 @@ paths:
           $ref: "#/components/responses/NotFound"
   "/products/{id}/image":
     put:
+      summary: Update or upload a product image
       description: Update or upload a product image
       operationId: updateProductImage
       tags:
@@ -117,6 +122,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: Product identifier.
           schema:
             type: integer
           examples:
@@ -164,6 +170,7 @@ paths:
           $ref: "#/components/responses/NotFound"
   /products:
     get:
+      summary: Get products based on type
       description: GET Products based on type
       operationId: get-products
       tags:
@@ -171,22 +178,26 @@ paths:
       parameters:
         - name: type
           in: query
+          description: Filter products by type.
           schema:
             $ref: "#/components/schemas/ProductType"
         - name: pageSize
           in: header
           required: false
+          description: Number of products to return per page.
           schema:
             type: integer
         - name: from-date
           in: query
           required: false
+          description: Include products created on or after this date.
           schema:
             type: string
             format: date
         - name: to-date
           in: query
           required: false
+          description: Include products created on or before this date.
           schema:
             type: string
             format: date
@@ -202,6 +213,7 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
     post:
+      summary: Create a product
       description: POST products
       operationId: post-products
       tags:
@@ -212,6 +224,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
+          description: Idempotency key for safely retrying product creation.
           schema:
             $ref: "#/components/schemas/IdempotencyKey"
           examples:
@@ -242,6 +255,7 @@ paths:
           $ref: "#/components/responses/UnprocessableEntity"
   /orders:
     post:
+      summary: Create an order
       description: POST /orders
       operationId: post-orders
       tags:
@@ -252,6 +266,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
+          description: Idempotency key for safely retrying order creation.
           schema:
             $ref: "#/components/schemas/IdempotencyKey"
           examples:
@@ -284,6 +299,7 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
     get:
+      summary: Search for orders
       description: Search for orders
       operationId: get-orders
       tags:
@@ -313,6 +329,7 @@ paths:
         name: id
         in: path
         required: true
+        description: Order identifier.
         examples:
           GET_ORDER:
             value: 10
@@ -323,6 +340,7 @@ paths:
           INVALID_ID:
             value: 433
     get:
+      summary: Fetch order details
       description: Fetch order details
       operationId: get-orders-id
       tags:
@@ -346,6 +364,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
     patch:
+      summary: Update order details
       description: Update order details
       operationId: patch-orders-id
       tags:
@@ -379,6 +398,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
     delete:
+      summary: Cancel an order
       description: Cancel an order
       operationId: delete-orders-id
       tags:

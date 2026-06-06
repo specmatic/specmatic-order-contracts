@@ -1,0 +1,16 @@
+profiles:
+  default:
+    rules:
+      extends:
+        - recommended
+      exclude:
+        - info-contact
+        - info-license
+        - no-empty-servers
+        - no-server-example.com
+        - path-segment-plural
+        - paths-kebab-case
+        - required-string-property-missing-min-length
+        - scalar-property-missing-example
+        - security-defined
+        - spec-strict-refs

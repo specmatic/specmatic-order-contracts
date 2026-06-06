@@ -4,6 +4,11 @@ info:
   version: "2.0"
 servers:
   - url: "http://localhost:3000"
+tags:
+  - name: Product
+    description: Product related APIs.
+  - name: Order
+    description: Order related APIs.
 paths:
   "/products/{id}":
     parameters:
@@ -12,6 +17,7 @@ paths:
           type: number
         in: path
         required: true
+        description: Product identifier.
         examples:
           GET_PRODUCT:
             value: 10
@@ -20,10 +26,12 @@ paths:
           DELETE_PRODUCT:
             value: 20
           INVALID_ID:
-            value: "344"
+            value: 344
     get:
       summary: Fetch product details
-      tags: []
+      tags:
+        - Product
+      description: Fetch product details.
       responses:
         "200":
           description: OK
@@ -57,6 +65,9 @@ paths:
     post:
       summary: Update product details
       operationId: post-products-id
+      tags:
+        - Product
+      description: Update product details.
       security:
         - ApiKeyAuth: []
       responses:
@@ -87,6 +98,9 @@ paths:
     delete:
       summary: Delete a product
       operationId: delete-products-id
+      tags:
+        - Product
+      description: Delete a product.
       security:
         - ApiKeyAuth: []
       responses:
@@ -105,6 +119,9 @@ paths:
     put:
       summary: Update or upload a product image
       operationId: updateProductImage
+      tags:
+        - Product
+      description: Update or upload a product image.
       parameters:
         - name: id
           in: path
@@ -162,9 +179,14 @@ paths:
   /products:
     get:
       summary: GET Products based on type
+      operationId: get-products
+      tags:
+        - Product
+      description: Get products based on type.
       parameters:
         - name: type
           in: query
+          description: Filter products by type.
           schema:
             $ref: "./common.yaml#/components/schemas/ProductType"
       responses:
@@ -176,8 +198,14 @@ paths:
                 type: array
                 items:
                   $ref: "common.yaml#/components/schemas/Product"
+        "400":
+          $ref: "./common_responses.yaml#/components/responses/BadRequest"
     post:
       summary: POST /products
+      operationId: post-products
+      tags:
+        - Product
+      description: Create a product.
       security:
         - ApiKeyAuth: []
       requestBody:
@@ -198,6 +226,10 @@ paths:
   /orders:
     post:
       summary: POST /orders
+      operationId: post-orders
+      tags:
+        - Order
+      description: Create an order.
       security:
         - ApiKeyAuth: []
       requestBody:
@@ -228,6 +260,9 @@ paths:
     get:
       summary: Search for orders
       operationId: get-orders
+      tags:
+        - Order
+      description: Search for orders.
       responses:
         "200":
           description: OK
@@ -249,6 +284,7 @@ paths:
       parameters:
         - name: productid
           in: query
+          description: Filter orders by product identifier.
           schema:
             type: number
           examples:
@@ -256,17 +292,20 @@ paths:
               value: 10
         - name: status
           in: query
+          description: Filter orders by order status.
           schema:
             type: string
           examples:
             200_OK:
               value: fulfilled
-      description: ""
 
   /orders/bulk:
     post:
       summary: Create multiple orders in bulk
       operationId: post-orders-bulk
+      tags:
+        - Order
+      description: Create multiple orders in bulk.
       security:
         - ApiKeyAuth: []
       requestBody:
@@ -310,6 +349,7 @@ paths:
         name: id
         in: path
         required: true
+        description: Order identifier.
         examples:
           GET_ORDER:
             value: 10
@@ -321,7 +361,9 @@ paths:
             value: 433
     get:
       summary: Fetch order details
-      tags: []
+      tags:
+        - Order
+      description: Fetch order details.
       responses:
         "200":
           description: OK
@@ -352,10 +394,12 @@ paths:
                     error: "Not Found"
                     message: "Product with id 344 was not found"
       operationId: get-orders-id
-      parameters: []
     post:
       summary: Update order details
       operationId: post-orders-id
+      tags:
+        - Order
+      description: Update order details.
       security:
         - ApiKeyAuth: []
       responses:
@@ -386,6 +430,9 @@ paths:
     delete:
       summary: Cancel an order
       operationId: delete-orders-id
+      tags:
+        - Order
+      description: Cancel an order.
       security:
         - ApiKeyAuth: []
       responses:
@@ -402,39 +449,6 @@ paths:
           $ref: "./common_responses.yaml#/components/responses/BadRequest"
 components:
   schemas:
-    Products_RequestBody:
-      required:
-        - inventory
-        - name
-        - type
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-            - gadget
-            - book
-            - food
-            - other
-        inventory:
-          type: number
-    Orders_RequestBody:
-      required:
-        - count
-        - productid
-        - status
-      properties:
-        productid:
-          type: number
-        count:
-          type: number
-        status:
-          type: string
-          enum:
-            - pending
-            - fulfilled
-            - cancelled
     ErrorResponseBody:
       properties:
         id:

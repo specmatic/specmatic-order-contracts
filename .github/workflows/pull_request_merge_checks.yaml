@@ -17,10 +17,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '25'
-
       - name: Get changed OpenAPI files
         id: changed-openapi-files
         uses: tj-actions/changed-files@v47
@@ -46,16 +42,16 @@ jobs:
             io/**/grpc/**/*.proto
             io/**/grpc/**/*.json
 
-      - name: Install Spectral Linter
-        if: steps.changed-openapi-files.outputs.any_changed == 'true'
-        run: npm install -g @stoplight/spectral-cli
-
-      - name: Run Spectral linter on changed files
+      - name: Save Specmatic license
         if: steps.changed-openapi-files.outputs.any_changed == 'true'
         run: |
-          echo "Running Spectral linter on: ${{ steps.changed-openapi-files.outputs.all_changed_files }}"
-          # Find all YAML files in openapi sub-directory
-          find io -type f -path '*/openapi/*' -iname '*.yaml' | xargs spectral lint     
+          mkdir -p ~/.specmatic
+          echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
+
+      - name: Run Specmatic linter on OpenAPI specs
+        if: steps.changed-openapi-files.outputs.any_changed == 'true'
+        run: |
+          ./scripts/run-specmatic-openapi-linter.sh ${{ steps.changed-openapi-files.outputs.all_changed_files }}
 
       - name: Validate OpenAPI examples
         run: |

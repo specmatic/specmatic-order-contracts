@@ -4,6 +4,11 @@ info:
   version: "2.0"
 servers:
   - url: "http://localhost:3000"
+tags:
+  - name: Product
+    description: Product related APIs.
+  - name: Order
+    description: Order related APIs.
 paths:
   "/products/{id}":
     parameters:
@@ -12,6 +17,7 @@ paths:
         name: id
         in: path
         required: true
+        description: Product identifier.
         examples:
           GET_DETAILS:
             value: 10
@@ -20,10 +26,12 @@ paths:
           DELETE_PRODUCT:
             value: 20
           INVALID_ID:
-            value: "344"
+            value: 344
     get:
       summary: Fetch product details
-      tags: []
+      tags:
+        - Product
+      description: Fetch product details.
       responses:
         "200":
           description: OK
@@ -57,6 +65,9 @@ paths:
     post:
       summary: Update product details
       operationId: post-products-id
+      tags:
+        - Product
+      description: Update product details.
       responses:
         "200":
           description: Update successful
@@ -85,6 +96,9 @@ paths:
     delete:
       summary: Delete a product
       operationId: delete-products-id
+      tags:
+        - Product
+      description: Delete a product.
       responses:
         "200":
           description: Deletion successful
@@ -100,9 +114,14 @@ paths:
   /products:
     get:
       summary: GET Products based on type
+      operationId: get-products
+      tags:
+        - Product
+      description: Get products based on type.
       parameters:
         - name: type
           in: query
+          description: Filter products by type.
           schema:
             type: string
             enum:
@@ -119,8 +138,14 @@ paths:
                 type: array
                 items:
                   $ref: "common.yaml#/components/schemas/Product"
+        "400":
+          $ref: "./common_responses.yaml#/components/responses/BadRequest"
     post:
       summary: POST /products
+      operationId: post-products
+      tags:
+        - Product
+      description: Create a product.
       requestBody:
         required: true
         content:
@@ -139,6 +164,10 @@ paths:
   /orders:
     post:
       summary: POST /orders
+      operationId: post-orders
+      tags:
+        - Order
+      description: Create an order.
       requestBody:
         required: true
         content:
@@ -167,6 +196,9 @@ paths:
     get:
       summary: Search for orders
       operationId: get-orders
+      tags:
+        - Order
+      description: Search for orders.
       responses:
         "200":
           description: OK
@@ -190,6 +222,7 @@ paths:
             type: integer
           in: query
           name: productid
+          description: Filter orders by product identifier.
           examples:
             200_OK:
               value: 10
@@ -197,10 +230,10 @@ paths:
             type: string
           in: query
           name: status
+          description: Filter orders by order status.
           examples:
             200_OK:
               value: fulfilled
-      description: ""
   "/orders/{id}":
     parameters:
       - schema:
@@ -208,6 +241,7 @@ paths:
         name: id
         in: path
         required: true
+        description: Order identifier.
         examples:
           DETAILS:
             value: 10
@@ -215,7 +249,9 @@ paths:
             value: 433
     get:
       summary: Fetch order details
-      tags: []
+      tags:
+        - Order
+      description: Fetch order details.
       responses:
         "200":
           description: OK
@@ -246,10 +282,12 @@ paths:
                     error: "Not Found"
                     message: "Product with id 344 was not found"
       operationId: get-orders-id
-      parameters: []
     post:
       summary: Update order details
       operationId: post-orders-id
+      tags:
+        - Order
+      description: Update order details.
       responses:
         "200":
           description: Success
@@ -278,6 +316,9 @@ paths:
     delete:
       summary: Cancel an order
       operationId: delete-orders-id
+      tags:
+        - Order
+      description: Cancel an order.
       responses:
         "200":
           description: Cancel successful
@@ -292,39 +333,6 @@ paths:
           $ref: "./common_responses.yaml#/components/responses/BadRequest"
 components:
   schemas:
-    Products_RequestBody:
-      required:
-        - inventory
-        - name
-        - type
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-            - gadget
-            - book
-            - food
-            - other
-        inventory:
-          type: number
-    Orders_RequestBody:
-      required:
-        - count
-        - productid
-        - status
-      properties:
-        productid:
-          type: number
-        count:
-          type: number
-        status:
-          type: string
-          enum:
-            - pending
-            - fulfilled
-            - cancelled
     ErrorResponseBody:
       properties:
         id:

@@ -20,7 +20,12 @@ paths:
       operationId: GetUuids
       description: Get all UUIDs for a given UUID type
       parameters:
-        - $ref: '#/components/parameters/UuidTypeQuery'
+        - name: uuid_type
+          in: query
+          required: false
+          description: Filter UUIDs by type.
+          schema:
+            $ref: '#/components/schemas/UuidType'
       responses:
         '200':
           description: OK
@@ -66,8 +71,18 @@ paths:
       operationId: GetUuid
       description: Get a UUID
       parameters:
-        - $ref: '#/components/parameters/UuidTypePath'
-        - $ref: '#/components/parameters/UuidPath'
+        - name: uuid_type
+          in: path
+          required: true
+          description: UUID classification.
+          schema:
+            $ref: '#/components/schemas/UuidType'
+        - name: uuid
+          in: path
+          required: true
+          description: UUID identifier.
+          schema:
+            $ref: '#/components/schemas/Uuid'
       responses:
         '200':
           description: OK
@@ -89,8 +104,18 @@ paths:
       operationId: UpdateUuid
       description: Update a UUID
       parameters:
-        - $ref: '#/components/parameters/UuidTypePath'
-        - $ref: '#/components/parameters/UuidPath'
+        - name: uuid_type
+          in: path
+          required: true
+          description: UUID classification.
+          schema:
+            $ref: '#/components/schemas/UuidType'
+        - name: uuid
+          in: path
+          required: true
+          description: UUID identifier.
+          schema:
+            $ref: '#/components/schemas/Uuid'
       requestBody:
         required: true
         content:
