@@ -20,6 +20,7 @@ paths:
   /products:
     summary: Create a new product
     post:
+      summary: Create a new product
       description: Create a new product
       operationId: createProduct
       tags:
@@ -98,6 +99,7 @@ paths:
           SUCCESS:
             value: "2025-11-28"
     get:
+      summary: Find available products
       description: Find available products
       operationId: findAvailableProducts
       tags:
@@ -134,6 +136,7 @@ paths:
                 $ref: '#/components/schemas/BadRequest'
   /orders:
     post:
+      summary: Create a new order
       description: Create a new order
       operationId: createOrder
       tags:
@@ -173,6 +176,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequest'
     get:
+      summary: Retrieve orders
       description: Retrieve orders
       operationId: getOrders
       tags:
@@ -206,6 +210,7 @@ paths:
                       status: "completed"
   /monitor/{id}:
     get:
+      summary: Retrieve monitor by ID
       description: Retrieves a Monitor by ID
       operationId: retrieveMonitor
       tags:
@@ -362,4 +367,3 @@ components:
           type: string
         message:
           type: string
-
