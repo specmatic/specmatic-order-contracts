@@ -67,6 +67,20 @@ jobs:
             specmatic/specmatic \
             backward-compatibility-check --target-path=io/specmatic/examples/store/openapi --base-branch=origin/main
 
+      - name: Upload OpenAPI backward compatibility CTRF report
+        uses: actions/upload-artifact@v6
+        if: always() && steps.changed-openapi-files.outputs.any_changed == 'true'
+        with:
+          name: openapi-backward-compatibility-ctrf-report
+          path: build/reports/specmatic/backward_compatibility/ctrf/*.json
+          retention-days: 5
+
+      - name: Render OpenAPI backward compatibility CTRF report
+        uses: ctrf-io/github-test-reporter@v1
+        if: always() && steps.changed-openapi-files.outputs.any_changed == 'true'
+        with:
+          report-path: build/reports/specmatic/backward_compatibility/ctrf/*.json
+
       - name: Run GraphQL backward compatibility check on changed files
         if: steps.changed-graphqls-files.outputs.any_changed == 'true'
         run: |
