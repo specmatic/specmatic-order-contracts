@@ -26,24 +26,7 @@ jobs:
             io/**/openapi/**/*.yml
             io/**/openapi/**/*.json
 
-      - name: Get changed GraphQLS files
-        id: changed-graphqls-files
-        uses: tj-actions/changed-files@v47
-        with:
-          files: |
-            io/**/graphql/**/*.graphqls
-            io/**/graphql/**/*.yaml
-
-      - name: Get changed gRPC files
-        id: changed-grpc-files
-        uses: tj-actions/changed-files@v47
-        with:
-          files: |
-            io/**/grpc/**/*.proto
-            io/**/grpc/**/*.json
-
       - name: Save Specmatic license
-        if: steps.changed-openapi-files.outputs.any_changed == 'true'
         run: |
           mkdir -p ~/.specmatic
           echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
@@ -59,41 +42,25 @@ jobs:
             specmatic/specmatic \
             examples validate --specs-dir=io/specmatic/examples/store/openapi
 
-      - name: Run OpenAPI backward compatibility check on changed files
-        if: steps.changed-openapi-files.outputs.any_changed == 'true'
+      - name: Run backward compatibility check
+        env:
+          SPECMATIC_LICENSE_CONTENT: ${{ secrets.SPECMATIC_LICENSE_KEY }}
         run: |
           docker run -v "$(pwd):/usr/src/app" \
-            -v ~/.specmatic:/root/.specmatic:ro \
-            specmatic/specmatic \
-            backward-compatibility-check --target-path=io/specmatic/examples/store/openapi --base-branch=origin/main
+            --user $(id -u):$(id -g) \
+            -e SPECMATIC_LICENSE_CONTENT \
+            specmatic/enterprise \
+            backward-compatibility-check --base-branch=origin/main
 
-      - name: Upload OpenAPI backward compatibility CTRF report
+      - name: Upload backward compatibility CTRF report
         uses: actions/upload-artifact@v6
-        if: always() && steps.changed-openapi-files.outputs.any_changed == 'true'
+        if: always() # Run even if the backward compatibility check fails
         with:
-          name: openapi-backward-compatibility-ctrf-report
+          name: backward-compatibility-ctrf-report
           path: build/reports/specmatic/backward_compatibility/ctrf/*.json
 
-      - name: Render OpenAPI backward compatibility CTRF report
+      - name: Render backward compatibility CTRF report
         uses: ctrf-io/github-test-reporter@v1
-        if: always() && steps.changed-openapi-files.outputs.any_changed == 'true'
+        if: always() # Run even if the backward compatibility check fails
         with:
           report-path: build/reports/specmatic/backward_compatibility/ctrf/*.json
-
-      - name: Run GraphQL backward compatibility check on changed files
-        if: steps.changed-graphqls-files.outputs.any_changed == 'true'
-        run: |
-          docker run -v "$(pwd):/usr/src/app" \
-            --user $(id -u):$(id -g) \
-            --env-file env.list \
-            specmatic/specmatic-graphql \
-            backward-compatibility-check --target-path=io/specmatic/examples/store/graphql --base-branch origin/main
-
-      - name: Run gRPC backward compatibility check on changed files
-        if: steps.changed-grpc-files.outputs.any_changed == 'true'
-        run: |
-          docker run -v "$(pwd):/usr/src/app" \
-            --user $(id -u):$(id -g) \
-            --env-file env.list \
-            specmatic/specmatic-grpc \
-            backward-compatibility-check --target-path=io/specmatic/examples/store/grpc --base-branch origin/main
