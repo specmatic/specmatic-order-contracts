@@ -17,10 +17,31 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get changed OpenAPI files
+        id: changed-openapi-files
+        uses: tj-actions/changed-files@v47
+        with:
+          files: |
+            io/**/openapi/**/*.yaml
+            io/**/openapi/**/*.yml
+            io/**/openapi/**/*.json
+
       - name: Save Specmatic license
+        if: steps.changed-openapi-files.outputs.any_changed == 'true'
         run: |
           mkdir -p ~/.specmatic
           echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
+
+      - name: Run Specmatic linter on OpenAPI specs
+        if: steps.changed-openapi-files.outputs.any_changed == 'true'
+        run: |
+          ./scripts/run-specmatic-openapi-linter.sh ${{ steps.changed-openapi-files.outputs.all_changed_files }}
+
+      - name: Validate OpenAPI examples
+        run: |
+          docker run -v "$(pwd):/usr/src/app" \
+            specmatic/specmatic \
+            examples validate --specs-dir=io/specmatic/examples/store/openapi
 
       - name: Run backward compatibility check
         run: |
