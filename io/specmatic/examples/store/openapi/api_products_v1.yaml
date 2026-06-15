@@ -95,6 +95,9 @@ components:
         cost:
           type: integer
           nullable: true
+        description:
+          type: string
+          nullable: true
     ProductId:
       title: Product Id
       type: object
