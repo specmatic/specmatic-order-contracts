@@ -73,7 +73,6 @@ jobs:
         with:
           name: openapi-backward-compatibility-ctrf-report
           path: build/reports/specmatic/backward_compatibility/ctrf/*.json
-          retention-days: 5
 
       - name: Render OpenAPI backward compatibility CTRF report
         uses: ctrf-io/github-test-reporter@v1
