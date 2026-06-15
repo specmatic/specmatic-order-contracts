@@ -37,9 +37,12 @@ jobs:
           ./scripts/run-specmatic-openapi-linter.sh ${{ steps.changed-openapi-files.outputs.all_changed_files }}
 
       - name: Validate OpenAPI examples
+        env:
+          SPECMATIC_LICENSE_CONTENT: ${{ secrets.SPECMATIC_LICENSE_KEY }}
         run: |
           docker run -v "$(pwd):/usr/src/app" \
-            specmatic/specmatic \
+            -e SPECMATIC_LICENSE_CONTENT \
+            specmatic/enterprise \
             examples validate --specs-dir=io/specmatic/examples/store/openapi
 
       - name: Run backward compatibility check
