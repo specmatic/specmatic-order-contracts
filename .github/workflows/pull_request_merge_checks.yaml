@@ -27,7 +27,6 @@ jobs:
             io/**/openapi/**/*.json
 
       - name: Save Specmatic license
-        if: steps.changed-openapi-files.outputs.any_changed == 'true'
         run: |
           mkdir -p ~/.specmatic
           echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
@@ -44,12 +43,12 @@ jobs:
             examples validate --specs-dir=io/specmatic/examples/store/openapi
 
       - name: Run backward compatibility check
+        env:
+          SPECMATIC_LICENSE_CONTENT: ${{ secrets.SPECMATIC_LICENSE_KEY }}
         run: |
           docker run -v "$(pwd):/usr/src/app" \
-            -v ~/.specmatic:/root/.specmatic:ro \
-            -e GIT_CONFIG_COUNT=1 \
-            -e GIT_CONFIG_KEY_0=safe.directory \
-            -e GIT_CONFIG_VALUE_0='*' \
+            --user $(id -u):$(id -g) \
+            -e SPECMATIC_LICENSE_CONTENT \
             specmatic/enterprise \
             backward-compatibility-check --base-branch=origin/main
 
