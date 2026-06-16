@@ -1,5 +1,5 @@
 openapi: 3.0.1
-info:
+info: 
   title: Order API
   description: Sample Order API
   version: '5.0'
