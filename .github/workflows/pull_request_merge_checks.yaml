@@ -51,7 +51,12 @@ jobs:
       - name: Run Specmatic linter on OpenAPI specs
         if: steps.changed-openapi-files.outputs.any_changed == 'true'
         run: |
-          ./scripts/run-specmatic-openapi-linter.sh ${{ steps.changed-openapi-files.outputs.all_changed_files }}
+         docker run --rm \
+          -v "$(pwd):/usr/src/app" \
+          -v "$HOME/.specmatic:/root/.specmatic:ro" \
+          -w /usr/src/app \
+          specmatic/enterprise \
+          lint 'io/specmatic/examples/store/openapi/*.yaml'
 
       - name: Validate OpenAPI examples
         run: |

@@ -31,7 +31,12 @@ Backward compatibility between API specifications is now automatically checked u
 Below is the instruction to run the OpenAPI linter on your local machine.
 
 ```
-./scripts/run-specmatic-openapi-linter.sh
+ docker run --rm \
+  -v "$(pwd):/usr/src/app" \
+  -v "$HOME/.specmatic:/root/.specmatic:ro" \
+  -w /usr/src/app \
+  specmatic/enterprise \
+  lint 'io/specmatic/examples/store/openapi/*.yaml'
 ```
 
 This runs Specmatic Linter on all OpenAPI specs under `io/**/openapi` using the recommended ruleset from `specmatic-linter.yaml`.
