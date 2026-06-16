@@ -56,7 +56,7 @@ jobs:
           -v "$HOME/.specmatic:/root/.specmatic:ro" \
           -w /usr/src/app \
           specmatic/enterprise \
-          lint 'io/specmatic/examples/store/openapi/*.yaml'
+          lint ${{ steps.changed-openapi-files.outputs.all_changed_files }}
 
       - name: Validate OpenAPI examples
         run: |
