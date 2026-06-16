@@ -28,10 +28,14 @@ Backward compatibility between API specifications is now automatically checked u
 
 ## Linting
 
-Below is the instruction to run the OpenAPI linter on your local machine.
+Below is the instruction to run the OpenAPI linter on your local machine. It lints every OpenAPI spec under `io/**/openapi` using the recommended ruleset from `specmatic-linter.yaml`.
 
 ```
-./scripts/run-specmatic-openapi-linter.sh
+SPECS=$(find io -path '*/openapi/*' -type f \( -name '*.yaml' -o -name '*.yml' \) | xargs grep -lE '^(openapi|swagger):')
+docker run --rm \
+  -v "$(pwd):/usr/src/app" \
+  -v "$HOME/.specmatic:/root/.specmatic:ro" \
+  -w /usr/src/app \
+  specmatic/enterprise \
+  lint $SPECS --config specmatic-linter.yaml
 ```
-
-This runs Specmatic Linter on all OpenAPI specs under `io/**/openapi` using the recommended ruleset from `specmatic-linter.yaml`.

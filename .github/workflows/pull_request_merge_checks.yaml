@@ -26,15 +26,15 @@ jobs:
             io/**/openapi/**/*.yml
             io/**/openapi/**/*.json
 
-      - name: Save Specmatic license
-        run: |
-          mkdir -p ~/.specmatic
-          echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
-
       - name: Run Specmatic linter on OpenAPI specs
         if: steps.changed-openapi-files.outputs.any_changed == 'true'
+        env:
+          SPECMATIC_LICENSE_CONTENT: ${{ secrets.SPECMATIC_LICENSE_KEY }}
         run: |
-          ./scripts/run-specmatic-openapi-linter.sh ${{ steps.changed-openapi-files.outputs.all_changed_files }}
+          docker run -v "$(pwd):/usr/src/app" \
+            -e SPECMATIC_LICENSE_CONTENT \
+            specmatic/enterprise \
+            lint ${{ steps.changed-openapi-files.outputs.all_changed_files }} --config specmatic-linter.yaml
 
       - name: Validate OpenAPI examples
         env:

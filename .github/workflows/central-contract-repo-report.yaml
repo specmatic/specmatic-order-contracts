@@ -19,8 +19,16 @@ jobs:
           echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
 
       - name: Run Specmatic linter on OpenAPI specs
+        env:
+          SPECMATIC_LICENSE_CONTENT: ${{ secrets.SPECMATIC_LICENSE_KEY }}
         run: |
-          ./scripts/run-specmatic-openapi-linter.sh
+          SPECS=$(find io -path '*/openapi/*' -type f \( -name '*.yaml' -o -name '*.yml' \) | xargs grep -lE '^(openapi|swagger):')
+          docker run --rm \
+            -v "$(pwd):/usr/src/app" \
+            -e SPECMATIC_LICENSE_CONTENT \
+            -w /usr/src/app \
+            specmatic/enterprise \
+            lint $SPECS --config specmatic-linter.yaml
 
       - name: Generate central contract repo report
         run: |
