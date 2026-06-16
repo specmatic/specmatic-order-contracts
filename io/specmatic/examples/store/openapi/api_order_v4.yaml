@@ -38,7 +38,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./common.yaml#/components/schemas/Product"
+                $ref: "./common.yml#/components/schemas/Product"
               examples:
                 GET_PRODUCT:
                   value:
@@ -47,7 +47,7 @@ paths:
                     inventory: 10
                     id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
         "404":
           description: "Not Found"
           content:
@@ -81,13 +81,13 @@ paths:
                 UPDATE_PRODUCT:
                   value: "success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "./common.yaml#/components/schemas/Product"
+              $ref: "./common.yml#/components/schemas/Product"
             examples:
               UPDATE_PRODUCT:
                 value:
@@ -114,7 +114,7 @@ paths:
                 DELETE_PRODUCT:
                   value: "success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
   "/products/{id}/image":
     put:
       summary: Update or upload a product image
@@ -169,7 +169,7 @@ paths:
                     message: "Product image updated successfully"
                     productId: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
         "404":
           description: Not Found
           content:
@@ -188,7 +188,7 @@ paths:
           in: query
           description: Filter products by type.
           schema:
-            $ref: "./common.yaml#/components/schemas/ProductType"
+            $ref: "./common.yml#/components/schemas/ProductType"
       responses:
         "200":
           description: List of products in the response
@@ -197,9 +197,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "common.yaml#/components/schemas/Product"
+                  $ref: "common.yml#/components/schemas/Product"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
     post:
       summary: POST /products
       operationId: post-products
@@ -213,16 +213,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "common.yaml#/components/schemas/ProductDetails"
+              $ref: "common.yml#/components/schemas/ProductDetails"
       responses:
         "200":
           description: POST /products
           content:
             application/json:
               schema:
-                $ref: "common.yaml#/components/schemas/ProductId"
+                $ref: "common.yml#/components/schemas/ProductId"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
   /orders:
     post:
       summary: POST /orders
@@ -237,7 +237,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "common.yaml#/components/schemas/OrderDetails"
+              $ref: "common.yml#/components/schemas/OrderDetails"
             examples:
               CREATE_ORDER:
                 value:
@@ -250,13 +250,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "common.yaml#/components/schemas/OrderId"
+                $ref: "common.yml#/components/schemas/OrderId"
               examples:
                 CREATE_ORDER:
                   value:
                     id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
     get:
       summary: Search for orders
       operationId: get-orders
@@ -271,7 +271,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "./common.yaml#/components/schemas/Order"
+                  $ref: "./common.yml#/components/schemas/Order"
               examples:
                 200_OK:
                   value:
@@ -280,7 +280,7 @@ paths:
                       status: "pending"
                       id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
       parameters:
         - name: productid
           in: query
@@ -315,7 +315,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "common.yaml#/components/schemas/OrderDetails"
+              $ref: "common.yml#/components/schemas/OrderDetails"
             examples:
               BULK_CREATE_ORDERS:
                 value:
@@ -333,14 +333,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "common.yaml#/components/schemas/OrderId"
+                  $ref: "common.yml#/components/schemas/OrderId"
               examples:
                 BULK_CREATE_ORDERS:
                   value:
                     - id: 10
                     - id: 30
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
       
   "/orders/{id}":
     parameters:
@@ -370,7 +370,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./common.yaml#/components/schemas/Order"
+                $ref: "./common.yml#/components/schemas/Order"
               examples:
                 GET_ORDER:
                   value:
@@ -379,7 +379,7 @@ paths:
                     status: "pending"
                     id: 10
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
         "404":
           description: "Not Found"
           content:
@@ -413,13 +413,13 @@ paths:
                 UPDATE_ORDER:
                   value: "success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "./common.yaml#/components/schemas/Order"
+              $ref: "./common.yml#/components/schemas/Order"
             examples:
               UPDATE_ORDER:
                 value:
@@ -446,7 +446,7 @@ paths:
                 DELETE_ORDER:
                   value: "success"
         "400":
-          $ref: "./common_responses.yaml#/components/responses/BadRequest"
+          $ref: "./common_responses.yml#/components/responses/BadRequest"
 components:
   schemas:
     ErrorResponseBody:
