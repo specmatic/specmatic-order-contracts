@@ -315,7 +315,7 @@ paths:
             schema:
               type: array
               items:
-              $ref: "common.yml#/components/schemas/OrderDetails"
+                $ref: "common.yml#/components/schemas/OrderDetails"
             examples:
               BULK_CREATE_ORDERS:
                 value:
