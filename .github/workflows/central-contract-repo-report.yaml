@@ -20,7 +20,12 @@ jobs:
 
       - name: Run Specmatic linter on OpenAPI specs
         run: |
-          ./scripts/run-specmatic-openapi-linter.sh
+         docker run --rm \
+          -v "$(pwd):/usr/src/app" \
+          -v "$HOME/.specmatic:/root/.specmatic:ro" \
+          -w /usr/src/app \
+          specmatic/enterprise \
+          lint 'io/specmatic/examples/store/openapi/*.yaml'
 
       - name: Generate central contract repo report
         run: |
