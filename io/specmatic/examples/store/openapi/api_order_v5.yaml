@@ -87,6 +87,8 @@ paths:
                   value: "success"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "404":
           $ref: "#/components/responses/NotFound"
     delete:
@@ -166,6 +168,8 @@ paths:
                     message: "Success"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "404":
           $ref: "#/components/responses/NotFound"
   /products:
@@ -251,6 +255,8 @@ paths:
                 $ref: "#/components/schemas/Id"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
   /orders:
@@ -296,6 +302,8 @@ paths:
                     id: 10
         "400":
           $ref: "#/components/responses/BadRequest"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
     get:
@@ -395,6 +403,8 @@ paths:
                   value: "success"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "404":
           $ref: "#/components/responses/NotFound"
     delete:
@@ -545,7 +555,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorResponseBody"
-    
+    UnsupportedMediaType:
+      description: "Unsupported Media Type"
+      content:
+        application/json:
+          schema:
+            additionalProperties: true
     UnprocessableEntity:
       description: "Unprocessable Entity"
       content:

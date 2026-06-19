@@ -34,6 +34,12 @@ paths:
                       name: 'XYZ Phone'
                       type: 'gadget'
                       inventory: 2
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
 components:
   schemas:
     Product:

@@ -61,6 +61,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '503':
           description: Timeout
           content:
@@ -149,3 +151,10 @@ components:
           type: string
         message:
           type: string
+  responses:
+    UnsupportedMediaType:
+      description: Unsupported Media Type
+      content:
+        application/json:
+          schema:
+            additionalProperties: true
