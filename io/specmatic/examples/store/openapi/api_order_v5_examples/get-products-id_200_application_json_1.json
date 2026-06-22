@@ -1,0 +1,22 @@
+{
+    "http-request": {
+        "path": "/products/914",
+        "method": "GET",
+        "description": "This is an example of a request to retrieve a specific entity at the /products/914 endpoint"
+    },
+    "http-response": {
+        "status": 200,
+        "body": {
+            "id": 383,
+            "name": "Rustic Copper Plate",
+            "type": "book",
+            "inventory": 46,
+            "createdOn": "2026-06-22"
+        },
+        "status-text": "OK",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "description": "This is an example of a response "
+    }
+}

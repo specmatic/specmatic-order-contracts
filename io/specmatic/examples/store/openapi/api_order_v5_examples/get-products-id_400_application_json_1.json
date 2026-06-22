@@ -1,0 +1,21 @@
+{
+    "http-request": {
+        "path": "/products/false",
+        "method": "GET",
+        "description": "This is an example of a bad request for GET /products/false endpoint"
+    },
+    "http-response": {
+        "status": 400,
+        "body": {
+            "timestamp": "iure",
+            "status": 223,
+            "error": "Not Acceptable Here",
+            "message": "fugiat"
+        },
+        "status-text": "Bad Request",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "description": "This is an example of a response for a bad request sent to GET /products/false endpoint"
+    }
+}
