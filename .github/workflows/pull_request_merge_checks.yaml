@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+      - demo-main
 
 jobs:
   build:
@@ -46,7 +47,7 @@ jobs:
             --user $(id -u):$(id -g) \
             -e SPECMATIC_LICENSE_CONTENT \
             specmatic/enterprise \
-            backward-compatibility-check --base-branch=origin/main
+            backward-compatibility-check --base-branch=origin/${{ github.base_ref || 'main' }}
 
       - name: Upload backward compatibility CTRF report
         uses: actions/upload-artifact@v6
