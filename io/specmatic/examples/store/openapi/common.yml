@@ -30,7 +30,7 @@ components:
       enum:
         - book
         - food
-        - gadget
+        - electronics
         - other
     ProductId:
       title: Product Id
