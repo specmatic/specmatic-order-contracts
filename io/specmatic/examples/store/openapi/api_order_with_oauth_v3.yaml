@@ -125,7 +125,7 @@ paths:
           schema:
             type: string
             enum:
-              - gadget
+              - electronics
               - book
               - food
               - other
