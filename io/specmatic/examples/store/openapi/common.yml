@@ -23,6 +23,15 @@ components:
         - food
         - gadget
         - other
+    ProductTypeFilter:
+      type: string
+      title: Product Type Filter
+      description: Product types accepted by the GET /products search filter (request-only).
+      enum:
+        - book
+        - food
+        - gadget
+        - other
     ProductId:
       title: Product Id
       type: object

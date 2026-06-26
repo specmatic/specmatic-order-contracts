@@ -188,7 +188,7 @@ paths:
           in: query
           description: Filter products by type.
           schema:
-            $ref: "./common.yml#/components/schemas/ProductType"
+            $ref: "./common.yml#/components/schemas/ProductTypeFilter"
       responses:
         "200":
           description: List of products in the response

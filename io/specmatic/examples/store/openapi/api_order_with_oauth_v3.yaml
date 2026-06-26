@@ -123,12 +123,7 @@ paths:
           in: query
           description: Filter products by type.
           schema:
-            type: string
-            enum:
-              - gadget
-              - book
-              - food
-              - other
+            $ref: "./common.yml#/components/schemas/ProductTypeFilter"
       responses:
         "200":
           description: List of products in the response
