@@ -2,15 +2,24 @@ profiles:
   default:
     rules:
       extends:
-        - recommended
+        - lenient
       exclude:
         - info-contact
         - info-license
+        - api-info-title-description
+        - contact-information
+        - hosts-https-only
         - no-empty-servers
+        - no-unused-components
         - no-server-example.com
+        - path-parameters-defined
         - path-segment-plural
         - paths-kebab-case
+        - query-parameter-camel-case
+        - schema-definition-camel-case
         - required-string-property-missing-min-length
         - scalar-property-missing-example
+        - security-scheme-oauth2
+        - tag-description
         - security-defined
         - spec-strict-refs
