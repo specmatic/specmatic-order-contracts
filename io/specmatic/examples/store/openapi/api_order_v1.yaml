@@ -121,6 +121,8 @@ paths:
                     type: string
                   path:
                     type: string
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
       requestBody:
         required: true
         content:
@@ -206,6 +208,8 @@ paths:
                     type: string
                   path:
                     type: string
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
       requestBody:
         required: true
         content:
@@ -334,6 +338,8 @@ paths:
                     type: string
                   path:
                     type: string
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
       requestBody:
         required: true
         content:
@@ -510,6 +516,8 @@ paths:
                     type: string
                   path:
                     type: string
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
       requestBody:
         required: true
         content:
@@ -564,3 +572,10 @@ components:
       type: apiKey
       in: header
       name: Authenticate
+  responses:
+    UnsupportedMediaType:
+      description: Unsupported Media Type
+      content:
+        application/json:
+          schema:
+            additionalProperties: true

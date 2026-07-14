@@ -80,6 +80,8 @@ paths:
                   value: "success"
         "400":
           $ref: "./common_responses.yml#/components/responses/BadRequest"
+        "415":
+          $ref: "./common_responses.yml#/components/responses/UnsupportedMediaType"
       requestBody:
         required: true
         content:
@@ -161,6 +163,8 @@ paths:
                 $ref: "common.yml#/components/schemas/ProductId"
         "400":
           $ref: "./common_responses.yml#/components/responses/BadRequest"
+        "415":
+          $ref: "./common_responses.yml#/components/responses/UnsupportedMediaType"
   /orders:
     post:
       summary: POST /orders
@@ -193,6 +197,8 @@ paths:
                     id: 10
         "400":
           $ref: "./common_responses.yml#/components/responses/BadRequest"
+        "415":
+          $ref: "./common_responses.yml#/components/responses/UnsupportedMediaType"
     get:
       summary: Search for orders
       operationId: get-orders
@@ -300,6 +306,8 @@ paths:
                   value: "success"
         "400":
           $ref: "./common_responses.yml#/components/responses/BadRequest"
+        "415":
+          $ref: "./common_responses.yml#/components/responses/UnsupportedMediaType"
       requestBody:
         required: true
         content:

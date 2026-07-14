@@ -12,3 +12,5 @@ components:
           type: string
         message:
           type: string
+    UnsupportedMediaTypeErrorResponseBody:
+      additionalProperties: true
