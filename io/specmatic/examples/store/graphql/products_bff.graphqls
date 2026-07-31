@@ -6,7 +6,6 @@ schema {
 enum ProductType {
   gadget
   book
-  food
   other
 }
 
