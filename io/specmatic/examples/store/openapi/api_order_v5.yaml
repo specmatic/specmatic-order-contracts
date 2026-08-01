@@ -441,7 +441,7 @@ components:
       title: Product Type
       enum:
         - book
-        - food
+        - grocery
         - gadget
         - other
 
