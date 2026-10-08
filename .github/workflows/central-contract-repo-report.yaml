@@ -20,9 +20,10 @@ jobs:
 
       - name: Run Specmatic linter on OpenAPI specs
         run: |
-         docker run --rm \
-          -v "$(pwd):/usr/src/app" \
-          -v "$HOME/.specmatic:/root/.specmatic:ro" \
+          docker run --rm \
+           -v "$(pwd):/usr/src/app" \
+          -v "$HOME/.specmatic:/tmp/.specmatic:ro" \
+          -e HOME=/tmp \
           --user "$(id -u):$(id -g)" \
           -w /usr/src/app \
           ketan/specmatic-enterprise \
