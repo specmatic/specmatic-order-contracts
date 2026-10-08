@@ -1,5 +1,10 @@
 name: CI
 
+permissions:
+  contents: read
+  pull-requests: read
+  security-events: write
+
 on:
   push:
     branches:
@@ -24,12 +29,21 @@ jobs:
 
       - name: Run Specmatic linter on OpenAPI specs
         run: |
-         docker run --rm \
+          docker run --rm \
           -v "$(pwd):/usr/src/app" \
-          -v "$HOME/.specmatic:/root/.specmatic:ro" \
+          -v "$HOME/.specmatic:/tmp/.specmatic:ro" \
+          -e HOME=/tmp \
+          -e SPECMATIC_LICENSE_PATH=/tmp/.specmatic/specmatic-license.txt \
+          --user "$(id -u):$(id -g)" \
           -w /usr/src/app \
-          specmatic/enterprise \
+          ketan/specmatic-enterprise \
           lint 'io/specmatic/examples/store/openapi/*.yaml'
+
+      - name: Upload Specmatic SARIF report
+        if: always() && hashFiles('build/reports/specmatic/lint/combined.json') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: build/reports/specmatic/lint/combined.json
 
       - name: Validate OpenAPI examples
         run: |
