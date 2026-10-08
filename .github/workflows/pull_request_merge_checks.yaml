@@ -44,7 +44,7 @@ jobs:
         run: |
           sarif_files=(build/reports/specmatic/lint/openapi/*.sarif)
           if [ -e "${sarif_files[0]}" ]; then
-            jq -s '{"$schema": .[0]["$schema"], version: "2.1.0", runs: map(.runs[]) }' \
+            jq -s '{"$schema": .[0]["$schema"], version: "2.1.0", runs: [ (.[0].runs[0] + { results: [ .[] | .runs[] | .results[] ], artifacts: [ .[] | .runs[] | .artifacts[] ] }) ] }' \
               "${sarif_files[@]}" > build/reports/specmatic/lint/specmatic-lint.sarif
           fi
 
