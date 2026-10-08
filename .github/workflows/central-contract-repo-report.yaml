@@ -24,7 +24,7 @@ jobs:
           -v "$(pwd):/usr/src/app" \
           -v "$HOME/.specmatic:/root/.specmatic:ro" \
           -w /usr/src/app \
-          specmatic/enterprise \
+          ketan/specmatic-enterprise \
           lint 'io/specmatic/examples/store/openapi/*.yaml'
 
       - name: Generate central contract repo report

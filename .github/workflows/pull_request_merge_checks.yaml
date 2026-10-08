@@ -1,5 +1,10 @@
 name: CI
 
+permissions:
+  contents: read
+  pull-requests: read
+  security-events: write
+
 on:
   push:
     branches:
@@ -28,8 +33,23 @@ jobs:
           -v "$(pwd):/usr/src/app" \
           -v "$HOME/.specmatic:/root/.specmatic:ro" \
           -w /usr/src/app \
-          specmatic/enterprise \
+          ketan/specmatic-enterprise \
           lint 'io/specmatic/examples/store/openapi/*.yaml'
+
+      - name: Combine Specmatic SARIF reports
+        if: always()
+        run: |
+          sarif_files=(build/reports/specmatic/lint/openapi/*.sarif)
+          if [ -e "${sarif_files[0]}" ]; then
+            jq -s '{"$schema": .[0]["$schema"], version: "2.1.0", runs: map(.runs[]) }' \
+              "${sarif_files[@]}" > build/reports/specmatic/lint/specmatic-lint.sarif
+          fi
+
+      - name: Upload Specmatic SARIF report
+        if: always() && hashFiles('build/reports/specmatic/lint/specmatic-lint.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: build/reports/specmatic/lint/specmatic-lint.sarif
 
       - name: Validate OpenAPI examples
         run: |
