@@ -23,6 +23,7 @@ jobs:
          docker run --rm \
           -v "$(pwd):/usr/src/app" \
           -v "$HOME/.specmatic:/root/.specmatic:ro" \
+          --user "$(id -u):$(id -g)" \
           -w /usr/src/app \
           ketan/specmatic-enterprise \
           lint 'io/specmatic/examples/store/openapi/*.yaml'
